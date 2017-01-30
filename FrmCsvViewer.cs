@@ -26,7 +26,7 @@ namespace CsvView
         private string _loadedFile = string.Empty;
         private long _currentReg = 0;
         private long _totalRegs = 0;
-        private List<List<string>> _data = null;
+        private List<long> _index = null;
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
@@ -35,20 +35,83 @@ namespace CsvView
                 RenderRegClean();
                 _loadedFile = null;
                 _totalRegs = 0;
-                _data = null;
+                _index = null;
                 MessageBoxEx.Show(this, "FileNotFound");
                 return;
             }
 
             _loadedFile = txtPath.Text;
+            DateTime dtFile = File.GetCreationTime(_loadedFile);
+            string indexFile = _loadedFile + ".idx";
+            if (File.Exists(indexFile) && File.GetCreationTime(indexFile) > dtFile)
+            {
+                List<long> tempIndex = Index_LoadFile(indexFile);
 
-            var csvParser = new CsvParser();
-            csvParser.ParseFile(_loadedFile);
+                _index = tempIndex;
+                _totalRegs = _index.Count - 1;
+            }
+            else
+            {
+                // Generate index
+                DateTime dtNow = DateTime.UtcNow;
+                var csvParser = new CsvParser();
+                csvParser.GenerateIndex(_loadedFile);
+                TimeSpan tsGenIndex = DateTime.UtcNow - dtNow;
 
-            _totalRegs = csvParser.Data.Count;
-            _data = csvParser.Data;
+                _index = csvParser.Index;
+                _totalRegs = _index.Count - 1;
 
+                // Save Index if expensive generation
+                if (tsGenIndex.TotalSeconds > 2)
+                {
+                    Index_SaveFile(indexFile);
+                }
+
+            }
             RenderReg(0);
+        }
+
+        private void Index_SaveFile(string indexFile)
+        {
+            if (File.Exists(indexFile))
+            {
+                File.Delete(indexFile);
+            }
+            Stream streamOut = File.Open(indexFile, FileMode.Create);
+            using (BinaryWriter binWriter = new BinaryWriter(streamOut))
+            {
+                binWriter.Write(_index.Count);
+                for (int i = 0; i < _index.Count; i++)
+                {
+                    binWriter.Write(_index[i]);
+                }
+            }
+            streamOut.Close();
+        }
+
+        private static List<long> Index_LoadFile(string indexFile)
+        {
+            var tempIndex = new List<long>();
+
+            Stream streamIn = File.Open(indexFile, FileMode.Open);
+            using (BinaryReader binReader = new BinaryReader(streamIn))
+            {
+                int numRegs = binReader.ReadInt32();
+                for (int i = 0; i < numRegs; i++)
+                {
+                    long value = binReader.ReadInt64();
+                    tempIndex.Add(value);
+                }
+            }
+            streamIn.Close();
+            return tempIndex;
+        }
+
+        private List<string> Index_LoadReg(int idx)
+        {
+            var csvParser = new CsvParser();
+            csvParser.ParseFile(_loadedFile, _index[idx], 1);
+            return csvParser.Data[0];
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
@@ -58,7 +121,7 @@ namespace CsvView
 
         private void RenderReg(long currentReg)
         {
-            if (_data == null || _data.Count <= 0)
+            if (_index == null || _index.Count <= 0)
             {
                 RenderRegClean();
             }
@@ -85,7 +148,7 @@ namespace CsvView
             btnLastReg.Enabled = (last == false);
             btnNextReg.Enabled = (last == false);
 
-            List<string> currentData = _data[(int)currentReg];
+            List<string> currentData = Index_LoadReg((int)currentReg);
             
             pnlData.Visible = false;
             pnlData.Controls.Clear();
