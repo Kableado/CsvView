@@ -17,6 +17,8 @@ namespace CsvView
         {
             OpenFileDialog loadDialog = new OpenFileDialog();
             loadDialog.InitialDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+            loadDialog.DefaultExt = "csv";
+            loadDialog.Filter = "CSV Files|*.csv|Any File|*";
             DialogResult result = loadDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
