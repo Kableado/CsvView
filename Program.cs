@@ -1,22 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CsvView.Net
 {
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmCsvViewer());
+
+            var frmCsvViewer = new FrmCsvViewer();
+            if (args.Length > 0)
+            {
+                if (System.IO.File.Exists(args[0]))
+                {
+                    frmCsvViewer.LoadFile(args[0]);
+                }
+            }
+            Application.Run(frmCsvViewer);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace CsvView
         private void txtPath_DoubleClick(object sender, EventArgs e)
         {
             OpenFileDialog loadDialog = new OpenFileDialog();
+            loadDialog.InitialDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
             DialogResult result = loadDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
@@ -40,7 +41,13 @@ namespace CsvView
                 return;
             }
 
-            _loadedFile = txtPath.Text;
+            LoadFile(txtPath.Text);
+        }
+
+        public void LoadFile(string fileName)
+        {
+            _loadedFile = fileName;
+            txtPath.Text = fileName;
             DateTime dtFile = File.GetCreationTime(_loadedFile);
             string indexFile = _loadedFile + ".idx";
             if (File.Exists(indexFile) && File.GetCreationTime(indexFile) > dtFile)
