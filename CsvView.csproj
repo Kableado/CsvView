@@ -50,6 +50,9 @@
     <Compile Include="CTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="DoubleBufferPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FrmCsvViewer.cs">
       <SubType>Form</SubType>
     </Compile>

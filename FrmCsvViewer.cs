@@ -123,17 +123,17 @@ namespace CsvView
             return csvParser.Data[0];
         }
 
-        [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
-
-        private const int WM_SetRedraw = 0XB;
-
+        bool _rendering = false;
         private void RenderReg(long currentReg)
         {
             if (_index == null || _index.Count <= 0)
             {
                 RenderRegClean();
             }
+
+            if (_rendering) { return; }
+            _rendering = true;
+
             pnlReg.Enabled = true;
             bool first = false;
             bool last = false;
@@ -148,6 +148,9 @@ namespace CsvView
                 last = true;
             }
 
+            pnlData.SuspendDrawing();
+
+            pnlData.Controls.Clear();
             _currentReg = currentReg;
             txtCurrentReg.Text = Convert.ToString(currentReg);
             txtTotalRegs.Text = Convert.ToString(_totalRegs);
@@ -158,9 +161,7 @@ namespace CsvView
             btnNextReg.Enabled = (last == false);
 
             List<string> currentData = Index_LoadReg((int)currentReg);
-            
-            pnlData.Visible = false;
-            pnlData.Controls.Clear();
+
             int y = 0;
             const int TexboxPadding = 5;
             const int Padding = 9;
@@ -171,7 +172,9 @@ namespace CsvView
                 pnlData.Controls.Add(txtValue);
                 y += txtValue.Height + Padding;
             }
-            pnlData.Visible = true;
+
+            pnlData.ResumeDrawing();
+            _rendering = false;
         }
 
         private TextBox RenderValue(string value, int y, int TexboxPadding, int Padding, int LineHeight)
@@ -199,12 +202,20 @@ namespace CsvView
 
         private void RenderRegClean()
         {
+            if (_rendering) { return; }
+            _rendering = true;
+
+            pnlData.SuspendDrawing();
+
+            pnlData.Controls.Clear();
             pnlReg.Enabled = false;
             txtCurrentReg.Text = string.Empty;
             txtTotalRegs.Text = string.Empty;
-            pnlData.Controls.Clear();
-        }
 
+            pnlData.ResumeDrawing();
+            _rendering = false;
+        }
+        
         private void btnFirstReg_Click(object sender, EventArgs e)
         {
             RenderReg(0);

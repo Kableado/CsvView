@@ -37,8 +37,8 @@
             this.txtCurrentReg = new System.Windows.Forms.TextBox();
             this.txtTotalRegs = new System.Windows.Forms.TextBox();
             this.tblRegNumbers = new System.Windows.Forms.TableLayoutPanel();
-            this.pnlReg = new System.Windows.Forms.Panel();
-            this.pnlData = new System.Windows.Forms.Panel();
+            this.pnlReg = new CsvView.DoubleBufferPanel();
+            this.pnlData = new CsvView.DoubleBufferPanel();
             this.tblRegNumbers.SuspendLayout();
             this.pnlReg.SuspendLayout();
             this.SuspendLayout();
@@ -203,8 +203,8 @@
         private System.Windows.Forms.TextBox txtCurrentReg;
         private System.Windows.Forms.TextBox txtTotalRegs;
         private System.Windows.Forms.TableLayoutPanel tblRegNumbers;
-        private System.Windows.Forms.Panel pnlReg;
-        private System.Windows.Forms.Panel pnlData;
+        private CsvView.DoubleBufferPanel pnlReg;
+        private CsvView.DoubleBufferPanel pnlData;
     }
 }
 
