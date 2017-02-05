@@ -147,9 +147,10 @@ namespace CsvView
                 last = true;
             }
 
-            pnlData.SuspendDrawing();
-
-            pnlData.VerticalScroll.Value = 0;
+            pnlScrollData.SuspendDrawing();
+            pnlScrollData.VerticalScroll.Value = 0;
+            pnlData.Height = 10;
+            
             pnlData.Controls.Clear();
             _currentReg = currentReg;
             txtCurrentReg.Text = Convert.ToString(currentReg);
@@ -161,33 +162,36 @@ namespace CsvView
             btnNextReg.Enabled = (last == false);
 
             List<string> currentData = Index_LoadReg((int)currentReg);
-
+            
             int y = 0;
             const int TexboxPadding = 5;
-            const int Padding = 9;
+            const int PaddingLeft = 0;
+            const int PaddingRight = 0;
+            const int PaddingBetween = 10;
             const int LineHeight = 15;
             for (int i = 0; i < currentData.Count; i++)
             {
-                TextBox txtValue = RenderValue(currentData[i], y, TexboxPadding, Padding, LineHeight);
+                TextBox txtValue = RenderValue(currentData[i], y, TexboxPadding, PaddingLeft, PaddingRight, LineHeight);
                 pnlData.Controls.Add(txtValue);
-                y += txtValue.Height + Padding;
+                y += txtValue.Height + PaddingBetween;
             }
+            pnlData.Height = y;
 
-            pnlData.ResumeDrawing();
+            pnlScrollData.ResumeDrawing();
             _rendering = false;
         }
 
-        private TextBox RenderValue(string value, int y, int TexboxPadding, int Padding, int LineHeight)
+        private TextBox RenderValue(string value, int y, int TexboxPadding, int PaddingLeft, int PaddingRight, int LineHeight)
         {
             string[] valueLines = value.Split('\n');
             CTextBox txtValue = new CTextBox()
             {
                 Anchor = (AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right),
-                Width = pnlData.Width - Padding,
+                Width = pnlData.Width - (PaddingLeft + PaddingRight),
                 Height = (valueLines.Length * LineHeight) + TexboxPadding,
                 Multiline = (valueLines.Length > 1),
                 Top = y,
-                Left = 0,
+                Left = PaddingLeft,
                 ReadOnly = true,
             };
             for (int j = 0; j < valueLines.Length; j++)
@@ -206,15 +210,16 @@ namespace CsvView
             if (_rendering) { return; }
             _rendering = true;
 
-            pnlData.SuspendDrawing();
-
-            pnlData.VerticalScroll.Value = 0;
+            pnlScrollData.SuspendDrawing();
+            pnlScrollData.VerticalScroll.Value = 0;
+            pnlData.Height = 10;
+            
             pnlData.Controls.Clear();
             pnlReg.Enabled = false;
             txtCurrentReg.Text = string.Empty;
             txtTotalRegs.Text = string.Empty;
 
-            pnlData.ResumeDrawing();
+            pnlScrollData.ResumeDrawing();
             _rendering = false;
         }
         
