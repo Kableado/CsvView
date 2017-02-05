@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -17,8 +19,7 @@ namespace CsvView
                           ControlStyles.SupportsTransparentBackColor
                           , true);
         }
-
-
+        
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
 
@@ -37,5 +38,19 @@ namespace CsvView
             Refresh();
         }
 
+        [DefaultValue(false)]
+        [Localizable(false)]
+        [Category("CatLayout")]
+        [Description("DisableAutoScrollDescr")]
+        public bool DisableAutoScroll { get; set; }
+
+        protected override Point ScrollToControl(Control activeControl)
+        {
+            if (DisableAutoScroll)
+            {
+                return DisplayRectangle.Location;
+            }
+            return base.ScrollToControl(activeControl);
+        }
     }
 }

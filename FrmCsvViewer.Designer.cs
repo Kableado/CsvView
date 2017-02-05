@@ -170,6 +170,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlData.AutoScroll = true;
             this.pnlData.Location = new System.Drawing.Point(0, 37);
+            this.pnlData.DisableAutoScroll = true;
             this.pnlData.Name = "pnlData";
             this.pnlData.Size = new System.Drawing.Size(508, 432);
             this.pnlData.TabIndex = 11;

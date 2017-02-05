@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace CsvView
@@ -150,6 +149,7 @@ namespace CsvView
 
             pnlData.SuspendDrawing();
 
+            pnlData.VerticalScroll.Value = 0;
             pnlData.Controls.Clear();
             _currentReg = currentReg;
             txtCurrentReg.Text = Convert.ToString(currentReg);
@@ -208,6 +208,7 @@ namespace CsvView
 
             pnlData.SuspendDrawing();
 
+            pnlData.VerticalScroll.Value = 0;
             pnlData.Controls.Clear();
             pnlReg.Enabled = false;
             txtCurrentReg.Text = string.Empty;
