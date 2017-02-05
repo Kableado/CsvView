@@ -185,6 +185,7 @@ namespace CsvView
                 Anchor = (AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right),
                 Width = pnlData.Width - Padding,
                 Height = (valueLines.Length * LineHeight) + TexboxPadding,
+                Multiline = (valueLines.Length > 1),
                 Top = y,
                 Left = 0,
                 ReadOnly = true,
