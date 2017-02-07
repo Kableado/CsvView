@@ -51,20 +51,18 @@
             // 
             this.txtPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPath.Location = new System.Drawing.Point(7, 27);
-            this.txtPath.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtPath.Location = new System.Drawing.Point(5, 18);
             this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(676, 26);
+            this.txtPath.Size = new System.Drawing.Size(452, 20);
             this.txtPath.TabIndex = 0;
             this.txtPath.DoubleClick += new System.EventHandler(this.txtPath_DoubleClick);
             // 
             // btnLoad
             // 
             this.btnLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLoad.Location = new System.Drawing.Point(691, 27);
-            this.btnLoad.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnLoad.Location = new System.Drawing.Point(461, 18);
             this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(68, 26);
+            this.btnLoad.Size = new System.Drawing.Size(45, 20);
             this.btnLoad.TabIndex = 3;
             this.btnLoad.Text = "Load";
             this.btnLoad.UseVisualStyleBackColor = true;
@@ -76,9 +74,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpFile.Controls.Add(this.btnLoad);
             this.grpFile.Controls.Add(this.txtPath);
-            this.grpFile.Location = new System.Drawing.Point(20, 12);
+            this.grpFile.Location = new System.Drawing.Point(13, 8);
+            this.grpFile.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.grpFile.Name = "grpFile";
-            this.grpFile.Size = new System.Drawing.Size(766, 67);
+            this.grpFile.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.grpFile.Size = new System.Drawing.Size(511, 44);
             this.grpFile.TabIndex = 12;
             this.grpFile.TabStop = false;
             this.grpFile.Text = "File";
@@ -91,9 +91,10 @@
             this.pnlScrollData.AutoScroll = true;
             this.pnlScrollData.Controls.Add(this.pnlData);
             this.pnlScrollData.DisableAutoScroll = true;
-            this.pnlScrollData.Location = new System.Drawing.Point(20, 126);
+            this.pnlScrollData.Location = new System.Drawing.Point(13, 85);
+            this.pnlScrollData.Margin = new System.Windows.Forms.Padding(2);
             this.pnlScrollData.Name = "pnlScrollData";
-            this.pnlScrollData.Size = new System.Drawing.Size(766, 664);
+            this.pnlScrollData.Size = new System.Drawing.Size(511, 429);
             this.pnlScrollData.TabIndex = 12;
             // 
             // pnlData
@@ -102,10 +103,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlData.BackColor = System.Drawing.SystemColors.Control;
             this.pnlData.DisableAutoScroll = true;
-            this.pnlData.Location = new System.Drawing.Point(0, 0);
-            this.pnlData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pnlData.Location = new System.Drawing.Point(0, 1);
             this.pnlData.Name = "pnlData";
-            this.pnlData.Size = new System.Drawing.Size(766, 80);
+            this.pnlData.Size = new System.Drawing.Size(511, 51);
             this.pnlData.TabIndex = 11;
             // 
             // pnlReg
@@ -120,19 +120,17 @@
             this.pnlReg.Controls.Add(this.btnLastReg);
             this.pnlReg.Controls.Add(this.btnNextReg);
             this.pnlReg.Enabled = false;
-            this.pnlReg.Location = new System.Drawing.Point(21, 87);
-            this.pnlReg.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pnlReg.Location = new System.Drawing.Point(14, 57);
             this.pnlReg.Name = "pnlReg";
-            this.pnlReg.Size = new System.Drawing.Size(765, 701);
+            this.pnlReg.Size = new System.Drawing.Size(510, 456);
             this.pnlReg.TabIndex = 11;
             // 
             // btnPrevReg
             // 
             this.btnPrevReg.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnPrevReg.Location = new System.Drawing.Point(62, 0);
-            this.btnPrevReg.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnPrevReg.Location = new System.Drawing.Point(41, 0);
             this.btnPrevReg.Name = "btnPrevReg";
-            this.btnPrevReg.Size = new System.Drawing.Size(54, 31);
+            this.btnPrevReg.Size = new System.Drawing.Size(36, 23);
             this.btnPrevReg.TabIndex = 5;
             this.btnPrevReg.Text = "<";
             this.btnPrevReg.UseVisualStyleBackColor = true;
@@ -147,22 +145,20 @@
             this.tblRegNumbers.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tblRegNumbers.Controls.Add(this.txtCurrentReg, 0, 0);
             this.tblRegNumbers.Controls.Add(this.txtTotalRegs, 1, 0);
-            this.tblRegNumbers.Location = new System.Drawing.Point(124, 0);
-            this.tblRegNumbers.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.tblRegNumbers.Location = new System.Drawing.Point(83, 0);
             this.tblRegNumbers.Name = "tblRegNumbers";
             this.tblRegNumbers.RowCount = 1;
             this.tblRegNumbers.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tblRegNumbers.Size = new System.Drawing.Size(517, 31);
+            this.tblRegNumbers.Size = new System.Drawing.Size(345, 28);
             this.tblRegNumbers.TabIndex = 10;
             // 
             // txtCurrentReg
             // 
             this.txtCurrentReg.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtCurrentReg.Location = new System.Drawing.Point(4, 5);
-            this.txtCurrentReg.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtCurrentReg.Location = new System.Drawing.Point(3, 3);
             this.txtCurrentReg.Name = "txtCurrentReg";
-            this.txtCurrentReg.Size = new System.Drawing.Size(250, 26);
+            this.txtCurrentReg.Size = new System.Drawing.Size(166, 20);
             this.txtCurrentReg.TabIndex = 8;
             this.txtCurrentReg.TextChanged += new System.EventHandler(this.txtCurrentReg_TextChanged);
             // 
@@ -170,20 +166,18 @@
             // 
             this.txtTotalRegs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTotalRegs.Location = new System.Drawing.Point(262, 5);
-            this.txtTotalRegs.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.txtTotalRegs.Location = new System.Drawing.Point(175, 3);
             this.txtTotalRegs.Name = "txtTotalRegs";
             this.txtTotalRegs.ReadOnly = true;
-            this.txtTotalRegs.Size = new System.Drawing.Size(251, 26);
+            this.txtTotalRegs.Size = new System.Drawing.Size(167, 20);
             this.txtTotalRegs.TabIndex = 9;
             // 
             // btnFirstReg
             // 
             this.btnFirstReg.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnFirstReg.Location = new System.Drawing.Point(0, 0);
-            this.btnFirstReg.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnFirstReg.Name = "btnFirstReg";
-            this.btnFirstReg.Size = new System.Drawing.Size(54, 31);
+            this.btnFirstReg.Size = new System.Drawing.Size(36, 23);
             this.btnFirstReg.TabIndex = 4;
             this.btnFirstReg.Text = "|<";
             this.btnFirstReg.UseVisualStyleBackColor = true;
@@ -193,10 +187,9 @@
             // 
             this.btnLastReg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnLastReg.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLastReg.Location = new System.Drawing.Point(711, 0);
-            this.btnLastReg.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnLastReg.Location = new System.Drawing.Point(474, 0);
             this.btnLastReg.Name = "btnLastReg";
-            this.btnLastReg.Size = new System.Drawing.Size(54, 31);
+            this.btnLastReg.Size = new System.Drawing.Size(36, 23);
             this.btnLastReg.TabIndex = 7;
             this.btnLastReg.Text = ">|";
             this.btnLastReg.UseVisualStyleBackColor = true;
@@ -206,10 +199,9 @@
             // 
             this.btnNextReg.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnNextReg.Font = new System.Drawing.Font("Courier New", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnNextReg.Location = new System.Drawing.Point(649, 0);
-            this.btnNextReg.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.btnNextReg.Location = new System.Drawing.Point(433, 0);
             this.btnNextReg.Name = "btnNextReg";
-            this.btnNextReg.Size = new System.Drawing.Size(54, 31);
+            this.btnNextReg.Size = new System.Drawing.Size(36, 23);
             this.btnNextReg.TabIndex = 6;
             this.btnNextReg.Text = ">";
             this.btnNextReg.UseVisualStyleBackColor = true;
@@ -217,13 +209,12 @@
             // 
             // FrmCsvViewer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(798, 802);
+            this.ClientSize = new System.Drawing.Size(532, 521);
             this.Controls.Add(this.pnlScrollData);
             this.Controls.Add(this.grpFile);
             this.Controls.Add(this.pnlReg);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "FrmCsvViewer";
             this.Text = "CsvViewer";
             this.grpFile.ResumeLayout(false);

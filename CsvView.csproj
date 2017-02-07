@@ -64,6 +64,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CsvIndexer.cs" />
     <Compile Include="CsvParser.cs" />
     <Compile Include="CTextBox.cs">
       <SubType>Component</SubType>

@@ -23,7 +23,7 @@ namespace CsvView
 
         private List<string> _currentReg = null;
         StringBuilder _currentCell = null;
-        
+
         public List<List<string>> Data
         {
             get { return _data; }
@@ -31,15 +31,15 @@ namespace CsvView
 
         public void ParseLine(string line)
         {
-            if(_currentReg == null)
+            if (_currentReg == null)
             {
                 _currentReg = new List<string>();
             }
-            if(_currentCell == null)
+            if (_currentCell == null)
             {
                 _currentCell = new StringBuilder();
             }
-            
+
             for (int i = 0; i < line.Length; i++)
             {
                 char c = line[i];
@@ -96,7 +96,7 @@ namespace CsvView
                 while ((currentLine = reader.ReadLine()) != null)
                 {
                     ParseLine(currentLine);
-                    if(count>0 && Data.Count== count)
+                    if (count > 0 && Data.Count == count)
                     {
                         break;
                     }
@@ -104,89 +104,6 @@ namespace CsvView
             }
             stream.Close();
         }
-
-        private List<long> _index = new List<long>();
-
-        public List<long> Index { get { return _index; } }
-
-        private void DummyParser(string line)
-        {
-            for (int i = 0; i < line.Length; i++)
-            {
-                char c = line[i];
-                if (c == _separator && _insideString == false)
-                {
-                    continue;
-                }
-                if (c == _quoteChar && _insideString == false)
-                {
-                    _insideString = true;
-                    continue;
-                }
-                if (c == _quoteChar && _insideString == true)
-                {
-                    _insideString = false;
-                    continue;
-                }
-                if (c == _escapeChar && _insideString)
-                {
-                    i++;
-                    c = line[i];
-                }
-            }
-        }
-
-        private class TrackingTextReader : TextReader
-        {
-            private TextReader _baseReader;
-            private int _position;
-
-            public TrackingTextReader(TextReader baseReader)
-            {
-                _baseReader = baseReader;
-            }
-
-            public override int Read()
-            {
-                _position++;
-                return _baseReader.Read();
-            }
-
-            public override int Peek()
-            {
-                return _baseReader.Peek();
-            }
-
-            public int Position
-            {
-                get { return _position; }
-            }
-        }
-
-        public void GenerateIndex(string file)
-        {
-            _insideString = false;
-            _index.Clear();
-            FileStream stream = new FileStream(file, FileMode.Open);
-            using (StreamReader streamReader = new StreamReader(stream, Encoding.Default, true, 4096))
-            using (TrackingTextReader reader = new TrackingTextReader(streamReader))
-            {
-                string currentLine;
-                if (_insideString == false)
-                {
-                    _index.Add(reader.Position);
-                }
-                while ((currentLine = reader.ReadLine()) != null)
-                {
-                    DummyParser(currentLine);
-                    if (_insideString == false)
-                    {
-                        _index.Add(reader.Position);
-                    }
-                }
-            }
-            stream.Close();
-        }
-
+        
     }
 }
