@@ -1,9 +1,10 @@
-﻿using System;
+﻿using CsvView.Code;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
-namespace CsvView
+namespace CsvView.UI
 {
     public partial class FrmCsvViewer : Form
     {

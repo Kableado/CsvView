@@ -64,26 +64,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CsvIndexer.cs" />
-    <Compile Include="CsvParser.cs" />
-    <Compile Include="CTextBox.cs">
+    <Compile Include="Code\CsvIndexer.cs" />
+    <Compile Include="Code\CsvParser.cs" />
+    <Compile Include="UI\CTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="DoubleBufferPanel.cs">
+    <Compile Include="UI\DoubleBufferPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="FrmCsvViewer.cs">
+    <Compile Include="UI\FrmCsvViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FrmCsvViewer.Designer.cs">
+    <Compile Include="UI\FrmCsvViewer.Designer.cs">
       <DependentUpon>FrmCsvViewer.cs</DependentUpon>
     </Compile>
-    <Compile Include="MessageBoxEx.cs" />
+    <Compile Include="UI\MessageBoxEx.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="FrmCsvViewer.resx">
-      <DependentUpon>FrmCsvViewer.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.manifest" />

@@ -1,4 +1,4 @@
-﻿namespace CsvView
+﻿namespace CsvView.UI
 {
     partial class FrmCsvViewer
     {
@@ -31,9 +31,9 @@
             this.txtPath = new System.Windows.Forms.TextBox();
             this.btnLoad = new System.Windows.Forms.Button();
             this.grpFile = new System.Windows.Forms.GroupBox();
-            this.pnlScrollData = new CsvView.DoubleBufferPanel();
-            this.pnlData = new CsvView.DoubleBufferPanel();
-            this.pnlReg = new CsvView.DoubleBufferPanel();
+            this.pnlScrollData = new CsvView.UI.DoubleBufferPanel();
+            this.pnlData = new CsvView.UI.DoubleBufferPanel();
+            this.pnlReg = new CsvView.UI.DoubleBufferPanel();
             this.btnPrevReg = new System.Windows.Forms.Button();
             this.tblRegNumbers = new System.Windows.Forms.TableLayoutPanel();
             this.txtCurrentReg = new System.Windows.Forms.TextBox();
@@ -238,10 +238,10 @@
         private System.Windows.Forms.TextBox txtCurrentReg;
         private System.Windows.Forms.TextBox txtTotalRegs;
         private System.Windows.Forms.TableLayoutPanel tblRegNumbers;
-        private CsvView.DoubleBufferPanel pnlReg;
-        private CsvView.DoubleBufferPanel pnlData;
+        private CsvView.UI.DoubleBufferPanel pnlReg;
+        private CsvView.UI.DoubleBufferPanel pnlData;
         private System.Windows.Forms.GroupBox grpFile;
-        private DoubleBufferPanel pnlScrollData;
+        private CsvView.UI.DoubleBufferPanel pnlScrollData;
     }
 }
 

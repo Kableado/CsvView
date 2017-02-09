@@ -3,7 +3,7 @@ using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Drawing;
 
-namespace CsvView
+namespace CsvView.UI
 {
     public class CTextBox : TextBox
     {

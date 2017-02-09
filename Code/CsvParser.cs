@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace CsvView
+namespace CsvView.Code
 {
     public class CsvParser
     {
