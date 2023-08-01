@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Code\CsvIndexer.cs" />
     <Compile Include="Code\CsvParser.cs" />
+    <Compile Include="Code\TrackingTextReader.cs" />
     <Compile Include="UI\CTextBox.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -51,7 +51,7 @@ namespace CsvView.UI
             _loadedFile = fileName;
             txtPath.Text = fileName;
 
-            var csvIndexer = new CsvIndexer();
+            CsvIndexer csvIndexer = new CsvIndexer();
             csvIndexer.LoadIndexOfFile(_loadedFile);
             _index = csvIndexer.Index;
             _totalRegs = _index.Count - 1;
@@ -108,16 +108,16 @@ namespace CsvView.UI
             List<string> currentData = Index_LoadReg((int)currentReg);
 
             int y = 0;
-            const int TexboxPadding = 5;
-            const int PaddingLeft = 0;
-            const int PaddingRight = 0;
-            const int PaddingBetween = 10;
-            const int LineHeight = 15;
+            const int textBoxPadding = 5;
+            const int paddingLeft = 0;
+            const int paddingRight = 0;
+            const int paddingBetween = 10;
+            const int lineHeight = 15;
             for (int i = 0; i < currentData.Count; i++)
             {
-                TextBox txtValue = RenderValue(currentData[i], y, TexboxPadding, PaddingLeft, PaddingRight, LineHeight);
+                TextBox txtValue = RenderValue(currentData[i], y, textBoxPadding, paddingLeft, paddingRight, lineHeight);
                 pnlData.Controls.Add(txtValue);
-                y += txtValue.Height + PaddingBetween;
+                y += txtValue.Height + paddingBetween;
             }
             pnlData.Height = y;
 
@@ -125,17 +125,17 @@ namespace CsvView.UI
             _rendering = false;
         }
 
-        private TextBox RenderValue(string value, int y, int TexboxPadding, int PaddingLeft, int PaddingRight, int LineHeight)
+        private TextBox RenderValue(string value, int y, int textBoxPadding, int paddingLeft, int paddingRight, int lineHeight)
         {
             string[] valueLines = value.Split('\n');
             CTextBox txtValue = new CTextBox()
             {
                 Anchor = (AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right),
-                Width = pnlData.Width - (PaddingLeft + PaddingRight),
-                Height = (valueLines.Length * LineHeight) + TexboxPadding,
+                Width = pnlData.Width - (paddingLeft + paddingRight),
+                Height = (valueLines.Length * lineHeight) + textBoxPadding,
                 Multiline = (valueLines.Length > 1),
                 Top = y,
-                Left = PaddingLeft,
+                Left = paddingLeft,
                 ReadOnly = true,
             };
             for (int j = 0; j < valueLines.Length; j++)

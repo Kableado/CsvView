@@ -51,38 +51,11 @@ namespace CsvView.Code
             }
         }
 
-        private class TrackingTextReader : TextReader
-        {
-            private readonly TextReader _baseReader;
-            private int _position;
-
-            public TrackingTextReader(TextReader baseReader)
-            {
-                _baseReader = baseReader;
-            }
-
-            public override int Read()
-            {
-                _position++;
-                return _baseReader.Read();
-            }
-
-            public override int Peek()
-            {
-                return _baseReader.Peek();
-            }
-
-            public int Position
-            {
-                get { return _position; }
-            }
-        }
-
         public void GenerateIndex(string file)
         {
             _insideString = false;
             _index.Clear();
-            FileStream stream = new FileStream(file, FileMode.Open);
+            using (FileStream stream = new FileStream(file, FileMode.Open))
             using (StreamReader streamReader = new StreamReader(stream, Encoding.Default, true, 4096))
             using (TrackingTextReader reader = new TrackingTextReader(streamReader))
             {
@@ -100,9 +73,8 @@ namespace CsvView.Code
                     }
                 }
             }
-            stream.Close();
         }
-        
+
         private void Index_SaveFile(string indexFile)
         {
             if (File.Exists(indexFile))
@@ -123,7 +95,7 @@ namespace CsvView.Code
 
         private static List<long> Index_LoadFile(string indexFile)
         {
-            var tempIndex = new List<long>();
+            List<long> tempIndex = new List<long>();
 
             Stream streamIn = File.Open(indexFile, FileMode.Open);
             using (BinaryReader binReader = new BinaryReader(streamIn))
@@ -142,7 +114,7 @@ namespace CsvView.Code
         public void LoadIndexOfFile(string file)
         {
             DateTime dtFile = File.GetCreationTime(file);
-            string indexFile = file + ".idx";
+            string indexFile = $"{file}.idx";
             if (File.Exists(indexFile) && File.GetCreationTime(indexFile) > dtFile)
             {
                 _index = Index_LoadFile(indexFile);
