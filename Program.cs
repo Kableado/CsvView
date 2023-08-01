@@ -1,8 +1,8 @@
-﻿using CsvView.UI;
-using System;
+﻿using System;
 using System.Windows.Forms;
+using CsvView.UI;
 
-namespace CsvView.Net
+namespace CsvView
 {
     static class Program
     {

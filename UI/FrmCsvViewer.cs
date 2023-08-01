@@ -27,9 +27,9 @@ namespace CsvView.UI
         }
 
         private string _loadedFile = string.Empty;
-        private long _currentReg = 0;
-        private long _totalRegs = 0;
-        private List<long> _index = null;
+        private long _currentReg;
+        private long _totalRegs;
+        private List<long> _index;
 
         private void btnLoad_Click(object sender, EventArgs e)
         {
@@ -66,7 +66,7 @@ namespace CsvView.UI
             return csvParser.Data[0];
         }
 
-        bool _rendering = false;
+        bool _rendering;
         private void RenderReg(long currentReg)
         {
             if (_index == null || _index.Count <= 0)

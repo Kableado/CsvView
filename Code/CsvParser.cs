@@ -6,11 +6,11 @@ namespace CsvView.Code
 {
     public class CsvParser
     {
-        private bool _insideString = false;
+        private bool _insideString;
 
-        private char _separator = ',';
-        private char _quoteChar = '"';
-        private char _escapeChar = '\\';
+        private readonly char _separator;
+        private readonly char _quoteChar;
+        private readonly char _escapeChar;
 
         public CsvParser(char separator = ',', char quoteChar = '"', char escapeChar = '\\')
         {
@@ -21,8 +21,8 @@ namespace CsvView.Code
 
         private List<List<string>> _data = new List<List<string>>();
 
-        private List<string> _currentReg = null;
-        StringBuilder _currentCell = null;
+        private List<string> _currentReg;
+        StringBuilder _currentCell;
 
         public List<List<string>> Data
         {
@@ -54,7 +54,7 @@ namespace CsvView.Code
                     _insideString = true;
                     continue;
                 }
-                if (c == _quoteChar && _insideString == true)
+                if (c == _quoteChar && _insideString)
                 {
                     _insideString = false;
                     continue;

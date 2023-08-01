@@ -7,11 +7,11 @@ namespace CsvView.Code
 {
     public class CsvIndexer
     {
-        private bool _insideString = false;
+        private bool _insideString;
 
-        private char _separator = ',';
-        private char _quoteChar = '"';
-        private char _escapeChar = '\\';
+        private readonly char _separator;
+        private readonly char _quoteChar;
+        private readonly char _escapeChar;
 
         public CsvIndexer(char separator = ',', char quoteChar = '"', char escapeChar = '\\')
         {
@@ -38,7 +38,7 @@ namespace CsvView.Code
                     _insideString = true;
                     continue;
                 }
-                if (c == _quoteChar && _insideString == true)
+                if (c == _quoteChar && _insideString)
                 {
                     _insideString = false;
                     continue;
@@ -53,7 +53,7 @@ namespace CsvView.Code
 
         private class TrackingTextReader : TextReader
         {
-            private TextReader _baseReader;
+            private readonly TextReader _baseReader;
             private int _position;
 
             public TrackingTextReader(TextReader baseReader)
