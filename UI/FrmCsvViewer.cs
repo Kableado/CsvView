@@ -1,8 +1,8 @@
-﻿using CsvView.Code;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using CsvLib;
 
 namespace CsvView.UI
 {

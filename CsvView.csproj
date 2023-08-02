@@ -64,9 +64,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Code\CsvIndexer.cs" />
-    <Compile Include="Code\CsvParser.cs" />
-    <Compile Include="Code\TrackingTextReader.cs" />
     <Compile Include="UI\CTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -101,6 +98,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="LICENSE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="CsvLib\CsvLib.csproj">
+      <Project>{eb0fdb60-8b9d-401c-85a8-4cf4105d5063}</Project>
+      <Name>CsvLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

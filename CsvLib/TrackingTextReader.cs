@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace CsvView.Code
+namespace CsvLib
 {
     public class TrackingTextReader : TextReader
     {
