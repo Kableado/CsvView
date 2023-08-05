@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvView", "CsvView.csproj",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvLib", "CsvLib\CsvLib.csproj", "{EB0FDB60-8B9D-401C-85A8-4CF4105D5063}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvLib.Tests", "CsvLib.Tests\CsvLib.Tests.csproj", "{EC5C84D8-1CDE-4AED-9C16-6C4086A20893}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{EB0FDB60-8B9D-401C-85A8-4CF4105D5063}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB0FDB60-8B9D-401C-85A8-4CF4105D5063}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB0FDB60-8B9D-401C-85A8-4CF4105D5063}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC5C84D8-1CDE-4AED-9C16-6C4086A20893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC5C84D8-1CDE-4AED-9C16-6C4086A20893}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC5C84D8-1CDE-4AED-9C16-6C4086A20893}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC5C84D8-1CDE-4AED-9C16-6C4086A20893}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
