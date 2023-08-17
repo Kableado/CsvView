@@ -80,20 +80,8 @@ public partial class MainWindow : Window
         RenderReg(0);
     }
 
-    private MainWindowViewModel Index_LoadReg(int idx, int maxIndex)
-    {
-        CsvParser csvParser = new();
-        csvParser.ParseFile(_loadedFile, _index[idx], 1);
-        MainWindowViewModel viewModel = new()
-        {
-            Index = idx,
-            MaxIndex = maxIndex,
-            Fields = csvParser.Data[0].Select(f => new FieldViewModel { Text = f, }).ToList(),
-        };
-        return viewModel;
-    }
+    private bool _rendering;
 
-    bool _rendering;
     private void RenderReg(long currentReg)
     {
         if (_rendering) { return; }
