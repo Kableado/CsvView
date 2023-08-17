@@ -3,13 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvView.Old", "CsvView.Old.csproj", "{587169B9-7891-4A2F-8537-9196898B86AF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvLib", "CsvLib\CsvLib.csproj", "{EB0FDB60-8B9D-401C-85A8-4CF4105D5063}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvLib.Tests", "CsvLib.Tests\CsvLib.Tests.csproj", "{EC5C84D8-1CDE-4AED-9C16-6C4086A20893}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CsvView", "CsvView\CsvView.csproj", "{65A0A7DA-5884-4DFE-8223-C8F5DBD881A8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{94D4A247-9453-45F4-8552-0D106801C9F0}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		LICENSE.txt = LICENSE.txt
+		.editorconfig = .editorconfig
+		.gitignore = .gitignore
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{587169B9-7891-4A2F-8537-9196898B86AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{587169B9-7891-4A2F-8537-9196898B86AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{587169B9-7891-4A2F-8537-9196898B86AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{587169B9-7891-4A2F-8537-9196898B86AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EB0FDB60-8B9D-401C-85A8-4CF4105D5063}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EB0FDB60-8B9D-401C-85A8-4CF4105D5063}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB0FDB60-8B9D-401C-85A8-4CF4105D5063}.Release|Any CPU.ActiveCfg = Release|Any CPU
