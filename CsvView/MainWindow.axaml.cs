@@ -104,7 +104,7 @@ public partial class MainWindow : Window
             _currentReg = -1;
             BtnFirst.IsEnabled = false;
             BtnPrevious.IsEnabled = false;
-            TxtIndex.IsEnabled = false;
+            TxtIndex.IsReadOnly = true;
             BtnNext.IsEnabled = false;
             BtnLast.IsEnabled = false;
 
@@ -128,7 +128,7 @@ public partial class MainWindow : Window
 
         BtnFirst.IsEnabled = (first == false);
         BtnPrevious.IsEnabled = (first == false);
-        TxtIndex.IsEnabled = true;
+        TxtIndex.IsReadOnly = false;
         BtnNext.IsEnabled = (last == false);
         BtnLast.IsEnabled = (last == false);
 

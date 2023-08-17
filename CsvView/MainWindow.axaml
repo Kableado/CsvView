@@ -12,23 +12,23 @@
     <Grid RowDefinitions="Auto,Auto,*">
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <Button Name="BtnLoad" Click="BtnLoad_OnClick">...</Button>
-            <TextBlock Name="TxtFileName" />
+            <TextBox Name="TxtFileName" IsReadOnly="true" />
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
             <Button Name="BtnFirst" Click="BtnFirst_OnClick">|◁</Button>
             <Button Name="BtnPrevious" Click="BtnPrevious_OnClick">◁</Button>
-            <TextBox Name="TxtIndex" Text="{Binding Index}" TextChanged="TxtIndex_OnTextChanged" ></TextBox>
+            <TextBox Name="TxtIndex" Text="{Binding Index}" TextChanged="TxtIndex_OnTextChanged"></TextBox>
             <TextBlock>/</TextBlock>
-            <TextBox Name="TxtMaxIndex" Text="{Binding MaxIndex}" IsEnabled="false"></TextBox>
+            <TextBox Name="TxtMaxIndex" Text="{Binding MaxIndex}" IsReadOnly="true"></TextBox>
             <Button Name="BtnNext" Click="BtnNext_OnClick">▷</Button>
             <Button Name="BtnLast" Click="BtnLast_OnClick">▷|</Button>
         </StackPanel>
-        <ScrollViewer Grid.Row="2" >
-            <StackPanel Orientation="Vertical" >
+        <ScrollViewer Grid.Row="2">
+            <StackPanel Orientation="Vertical">
                 <ItemsControl ItemsSource="{Binding Fields}">
                     <ItemsControl.DataTemplates>
                         <DataTemplate x:DataType="csvView:FieldViewModel">
-                            <TextBox Text="{Binding Text}" IsEnabled="False"/>
+                            <TextBox Text="{Binding Text}" IsReadOnly="true" />
                         </DataTemplate>
                     </ItemsControl.DataTemplates>
                 </ItemsControl>
