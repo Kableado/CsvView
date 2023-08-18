@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Text;
 
@@ -10,25 +9,34 @@ namespace CsvLib
         private int _position;
         private readonly StringBuilder _sbBuffer = new StringBuilder();
 
+        private readonly Encoding _currentEncoding = Encoding.Default;
+
         public BufferedTextReader(TextReader baseReader)
         {
             _baseReader = baseReader;
+            if (baseReader is StreamReader streamReader)
+            {
+                _currentEncoding = streamReader.CurrentEncoding;
+            }
         }
 
         public override int Read()
         {
-            _position++;
             int read = _baseReader.Read();
+            if (read > 127)
+            {
+                int count = _currentEncoding.GetByteCount(((char)read).ToString());
+                _position += count;
+            }
+            else
+            {
+                _position++;
+            }
             if (read != -1)
             {
                 _sbBuffer.Append((char)read);
             }
             return read;
-        }
-
-        public override int Read(char[] buffer, int index, int count)
-        {
-            throw new NotImplementedException("Read buffered method on BufferedTextReader");
         }
 
         public override int Peek()

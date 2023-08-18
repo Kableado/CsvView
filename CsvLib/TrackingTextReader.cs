@@ -1,5 +1,5 @@
-using System;
 using System.IO;
+using System.Text;
 
 namespace CsvLib
 {
@@ -7,21 +7,30 @@ namespace CsvLib
     {
         private readonly TextReader _baseReader;
         private int _position;
+        private readonly Encoding _currentEncoding = Encoding.Default;
 
         public TrackingTextReader(TextReader baseReader)
         {
             _baseReader = baseReader;
+            if (baseReader is StreamReader streamReader)
+            {
+                _currentEncoding = streamReader.CurrentEncoding;
+            }
         }
 
         public override int Read()
         {
-            _position++;
-            return _baseReader.Read();
-        }
-
-        public override int Read(char[] buffer, int index, int count)
-        {
-            throw new NotImplementedException("Read buffered method on TrackingTextReader");
+            int read = _baseReader.Read();
+            if (read > 127)
+            {
+                int count = _currentEncoding.GetByteCount(((char)read).ToString());
+                _position += count;
+            }
+            else
+            {
+                _position++;
+            }
+            return read;
         }
 
         public override int Peek()

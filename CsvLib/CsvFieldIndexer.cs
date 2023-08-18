@@ -9,6 +9,8 @@ namespace CsvLib
     {
         private bool _insideString;
 
+        private Encoding _currentEncoding = Encoding.Default;
+        
         private readonly char _separator;
         private readonly char _quoteChar;
         private readonly char _escapeChar;
@@ -59,6 +61,7 @@ namespace CsvLib
             List<long> fieldPositions = new List<long>();
             long? fieldStartPosition = null;
             long? fieldEndPosition = null;
+            int unicodeDelta = 0;
             for (int i = 0; i < line.Length; i++)
             {
                 char c = line[i];
@@ -90,7 +93,12 @@ namespace CsvLib
                 }
                 else
                 {
-                    long absolutePosition = lineOffset + i;
+                    if (c > 127)
+                    {
+                        unicodeDelta += _currentEncoding.GetByteCount(c.ToString()) - 1;
+                    }
+                    
+                    long absolutePosition = lineOffset + i + unicodeDelta;
                     if (fieldStartPosition == null) { fieldStartPosition = absolutePosition; }
                     fieldEndPosition = absolutePosition;
                 }
@@ -121,6 +129,10 @@ namespace CsvLib
             _index.Clear();
             _index.Add(0);
             int idxRow = 0;
+            if (textReader is StreamReader streamReader)
+            {
+                _currentEncoding = streamReader.CurrentEncoding;
+            }
             using (BufferedTextReader reader = new BufferedTextReader(textReader))
             {
                 string currentLine;
@@ -180,7 +192,7 @@ namespace CsvLib
         public void LoadIndexOfFile(string file)
         {
             DateTime dtFile = File.GetCreationTime(file);
-            string indexFile = $"{file}.idx";
+            string indexFile = $"{file}.idx2";
             if (File.Exists(indexFile) && File.GetCreationTime(indexFile) > dtFile)
             {
                 _index = Index_LoadFile(indexFile);
