@@ -104,6 +104,6 @@ namespace CsvLib
             }
             stream.Close();
         }
-        
+
     }
 }

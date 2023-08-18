@@ -46,7 +46,6 @@ namespace CsvLib
                 if (c == _escapeChar && _insideString)
                 {
                     i++;
-                    c = line[i];
                 }
             }
         }
@@ -125,7 +124,7 @@ namespace CsvLib
                 DateTime dtNow = DateTime.UtcNow;
                 GenerateIndex(file);
                 TimeSpan tsGenIndex = DateTime.UtcNow - dtNow;
-                
+
                 // Save Index if expensive generation
                 if (tsGenIndex.TotalSeconds > 2)
                 {

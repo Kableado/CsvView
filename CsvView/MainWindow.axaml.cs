@@ -5,6 +5,8 @@ using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using CsvLib;
 
+// ReSharper disable UnusedParameter.Local
+
 namespace CsvView;
 
 public partial class MainWindow : Window

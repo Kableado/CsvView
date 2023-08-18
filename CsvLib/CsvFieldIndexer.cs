@@ -25,7 +25,7 @@ namespace CsvLib
         public List<long> Index { get { return _index; } }
 
         private List<List<long>> _fieldIndex = new List<List<long>>();
-        
+
         public List<List<long>> FieldIndex { get { return _fieldIndex; } }
 
         private void DummyParser(string line)
@@ -50,7 +50,6 @@ namespace CsvLib
                 if (c == _escapeChar && _insideString)
                 {
                     i++;
-                    c = line[i];
                 }
             }
         }
@@ -84,7 +83,6 @@ namespace CsvLib
                 else if (c == _escapeChar && _insideString)
                 {
                     i++;
-                    c = line[i];
                 }
                 else if ((c == '\n' || c == '\r') && _insideString == false)
                 {
@@ -116,7 +114,7 @@ namespace CsvLib
                 GenerateIndex(streamReader);
             }
         }
-        
+
         public void GenerateIndex(TextReader textReader)
         {
             _insideString = false;
@@ -130,14 +128,14 @@ namespace CsvLib
                 {
                     DummyParser(currentLine);
                     if (_insideString) { continue; }
-                    
+
                     string fullLine = reader.GetBuffer();
                     reader.CleanBuffer();
                     List<long> fieldIndexes = ParseLineIndex(fullLine, _index[idxRow]);
                     _fieldIndex.Add(fieldIndexes);
-                        
+
                     _index.Add(reader.Position);
-                    
+
                     idxRow++;
                 }
             }
@@ -193,7 +191,7 @@ namespace CsvLib
                 DateTime dtNow = DateTime.UtcNow;
                 GenerateIndex(file);
                 TimeSpan tsGenIndex = DateTime.UtcNow - dtNow;
-                
+
                 // Save Index if expensive generation
                 if (tsGenIndex.TotalSeconds > 2)
                 {

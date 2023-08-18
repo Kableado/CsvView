@@ -4,42 +4,43 @@ namespace CvsLib;
 
 public class CsvFieldIndexerTests
 {
+
     #region GenerateIndex
-    
+
     [Fact]
     public void GenerateIndex__Empty()
     {
         // --- Arrange
         StringReader sr = new(string.Empty);
-        
+
         // --- Act
         CsvFieldIndexer indexer = new();
         indexer.GenerateIndex(sr);
-        
+
         // --- Assert
-        
+
         Assert.Single(indexer.Index);
-        
+
         Assert.Equal(0, indexer.Index[0]);
         Assert.Empty(indexer.FieldIndex);
     }
-    
+
     [Fact]
     public void GenerateIndex__PlainText__OneRow()
     {
         // --- Arrange
         StringReader sr = new("Hello World");
-        
+
         // --- Act
         CsvFieldIndexer indexer = new();
         indexer.GenerateIndex(sr);
-        
+
         // --- Assert
-        
+
         Assert.Equal(2, indexer.Index.Count);
         Assert.Equal(0, indexer.Index[0]);
         Assert.Equal(12, indexer.Index[1]);
-        
+
         Assert.Single(indexer.FieldIndex);
         Assert.Equal(0, indexer.FieldIndex[0][0]);
         Assert.Equal(10, indexer.FieldIndex[0][1]);
@@ -50,21 +51,21 @@ public class CsvFieldIndexerTests
     {
         // --- Arrange
         StringReader sr = new("""
-                                Hello World
-                                Hello World
-                                """);
-        
+                              Hello World
+                              Hello World
+                              """);
+
         // --- Act
         CsvFieldIndexer indexer = new();
         indexer.GenerateIndex(sr);
-        
+
         // --- Assert
-        
+
         Assert.Equal(3, indexer.Index.Count);
         Assert.Equal(0, indexer.Index[0]);
         Assert.Equal(12, indexer.Index[1]);
         Assert.Equal(24, indexer.Index[2]);
-        
+
         Assert.Equal(2, indexer.FieldIndex.Count);
         Assert.Equal(2, indexer.FieldIndex[0].Count);
         Assert.Equal(0, indexer.FieldIndex[0][0]);
@@ -79,21 +80,21 @@ public class CsvFieldIndexerTests
     {
         // --- Arrange
         StringReader sr = new("""
-                                "Hello World"
-                                "Hello World"
-                                """);
-        
+                              "Hello World"
+                              "Hello World"
+                              """);
+
         // --- Act
         CsvFieldIndexer indexer = new();
         indexer.GenerateIndex(sr);
-        
+
         // --- Assert
-        
+
         Assert.Equal(3, indexer.Index.Count);
         Assert.Equal(0, indexer.Index[0]);
         Assert.Equal(14, indexer.Index[1]);
         Assert.Equal(28, indexer.Index[2]);
-        
+
         Assert.Equal(2, indexer.FieldIndex.Count);
         Assert.Equal(2, indexer.FieldIndex[0].Count);
         Assert.Equal(1, indexer.FieldIndex[0][0]);
@@ -108,21 +109,21 @@ public class CsvFieldIndexerTests
     {
         // --- Arrange
         StringReader sr = new("""
-                                "Hello","World"
-                                "Hello","World"
-                                """);
-        
+                              "Hello","World"
+                              "Hello","World"
+                              """);
+
         // --- Act
         CsvFieldIndexer indexer = new();
         indexer.GenerateIndex(sr);
-        
+
         // --- Assert
-        
+
         Assert.Equal(3, indexer.Index.Count);
         Assert.Equal(0, indexer.Index[0]);
         Assert.Equal(16, indexer.Index[1]);
         Assert.Equal(32, indexer.Index[2]);
-        
+
         Assert.Equal(2, indexer.FieldIndex.Count);
         Assert.Equal(4, indexer.FieldIndex[0].Count);
         Assert.Equal(1, indexer.FieldIndex[0][0]);
@@ -136,7 +137,6 @@ public class CsvFieldIndexerTests
         Assert.Equal(29, indexer.FieldIndex[1][3]);
     }
 
-    
-    
     #endregion GenerateIndex
+
 }
