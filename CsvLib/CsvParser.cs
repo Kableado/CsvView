@@ -19,7 +19,7 @@ namespace CsvLib
             _escapeChar = escapeChar;
         }
 
-        private List<List<string>> _data = new List<List<string>>();
+        private List<List<string>> _data = new();
 
         private List<string> _currentReg;
         StringBuilder _currentCell;
@@ -29,16 +29,10 @@ namespace CsvLib
             get { return _data; }
         }
 
-        public void ParseLine(string line)
+        private void ParseLine(string line)
         {
-            if (_currentReg == null)
-            {
-                _currentReg = new List<string>();
-            }
-            if (_currentCell == null)
-            {
-                _currentCell = new StringBuilder();
-            }
+            _currentReg ??= new List<string>();
+            _currentCell ??= new StringBuilder();
 
             for (int i = 0; i < line.Length; i++)
             {
@@ -88,9 +82,9 @@ namespace CsvLib
             _insideString = false;
             _data = new List<List<string>>();
             _currentReg = null;
-            FileStream stream = new FileStream(file, FileMode.Open);
+            FileStream stream = new(file, FileMode.Open);
             stream.Seek(offset, SeekOrigin.Begin);
-            using (StreamReader reader = new StreamReader(stream, Encoding.Default, true, 4096))
+            using (StreamReader reader = new(stream, Encoding.Default, true, 4096))
             {
                 string currentLine;
                 while ((currentLine = reader.ReadLine()) != null)

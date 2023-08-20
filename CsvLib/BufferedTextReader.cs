@@ -7,7 +7,7 @@ namespace CsvLib
     {
         private readonly TextReader _baseReader;
         private int _position;
-        private readonly StringBuilder _sbBuffer = new StringBuilder();
+        private readonly StringBuilder _sbBuffer = new();
 
         private readonly Encoding _currentEncoding = Encoding.Default;
 

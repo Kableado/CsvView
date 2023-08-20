@@ -20,7 +20,7 @@ namespace CsvLib
             _escapeChar = escapeChar;
         }
 
-        private List<long> _index = new List<long>();
+        private List<long> _index = new();
 
         public List<long> Index { get { return _index; } }
 
@@ -54,34 +54,31 @@ namespace CsvLib
         {
             _insideString = false;
             _index.Clear();
-            using (FileStream stream = new FileStream(file, FileMode.Open))
-            using (StreamReader streamReader = new StreamReader(stream, Encoding.Default, true, 4096))
-            using (TrackingTextReader reader = new TrackingTextReader(streamReader))
+            _index.Add(0);
+            using FileStream stream = new(file, FileMode.Open);
+            using StreamReader streamReader = new(stream, Encoding.Default, true, 4096);
+            using TrackingTextReader reader = new(streamReader);
+            
+            string currentLine;
+            while ((currentLine = reader.ReadLine()) != null)
             {
-                string currentLine;
+                DummyParser(currentLine);
                 if (_insideString == false)
                 {
                     _index.Add(reader.Position);
-                }
-                while ((currentLine = reader.ReadLine()) != null)
-                {
-                    DummyParser(currentLine);
-                    if (_insideString == false)
-                    {
-                        _index.Add(reader.Position);
-                    }
                 }
             }
         }
 
         private void Index_SaveFile(string indexFile)
         {
+            if (indexFile == null) { return; }
             if (File.Exists(indexFile))
             {
                 File.Delete(indexFile);
             }
             Stream streamOut = File.Open(indexFile, FileMode.Create);
-            using (BinaryWriter binWriter = new BinaryWriter(streamOut))
+            using (BinaryWriter binWriter = new(streamOut))
             {
                 binWriter.Write(_index.Count);
                 for (int i = 0; i < _index.Count; i++)
@@ -94,10 +91,10 @@ namespace CsvLib
 
         private static List<long> Index_LoadFile(string indexFile)
         {
-            List<long> tempIndex = new List<long>();
+            List<long> tempIndex = new();
 
             Stream streamIn = File.Open(indexFile, FileMode.Open);
-            using (BinaryReader binReader = new BinaryReader(streamIn))
+            using (BinaryReader binReader = new(streamIn))
             {
                 int numRegs = binReader.ReadInt32();
                 for (int i = 0; i < numRegs; i++)

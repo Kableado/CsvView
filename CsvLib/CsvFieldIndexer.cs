@@ -22,11 +22,11 @@ namespace CsvLib
             _escapeChar = escapeChar;
         }
 
-        private List<long> _index = new List<long>();
+        private List<long> _index = new();
 
         public List<long> Index { get { return _index; } }
 
-        private List<List<long>> _fieldIndex = new List<List<long>>();
+        private List<List<long>> _fieldIndex = new();
 
         public List<List<long>> FieldIndex { get { return _fieldIndex; } }
 
@@ -58,7 +58,7 @@ namespace CsvLib
 
         private List<long> ParseLineIndex(string line, long lineOffset)
         {
-            List<long> fieldPositions = new List<long>();
+            List<long> fieldPositions = new();
             long? fieldStartPosition = null;
             long? fieldEndPosition = null;
             int unicodeDelta = 0;
@@ -99,7 +99,7 @@ namespace CsvLib
                     }
                     
                     long absolutePosition = lineOffset + i + unicodeDelta;
-                    if (fieldStartPosition == null) { fieldStartPosition = absolutePosition; }
+                    fieldStartPosition ??= absolutePosition;
                     fieldEndPosition = absolutePosition;
                 }
             }
@@ -116,11 +116,9 @@ namespace CsvLib
 
         public void GenerateIndex(string file)
         {
-            using (FileStream stream = new FileStream(file, FileMode.Open))
-            using (StreamReader streamReader = new StreamReader(stream, Encoding.Default, true, 4096))
-            {
-                GenerateIndex(streamReader);
-            }
+            using FileStream stream = new(file, FileMode.Open);
+            using StreamReader streamReader = new(stream, Encoding.Default, true, 4096);
+            GenerateIndex(streamReader);
         }
 
         public void GenerateIndex(TextReader textReader)
@@ -133,50 +131,53 @@ namespace CsvLib
             {
                 _currentEncoding = streamReader.CurrentEncoding;
             }
-            using (BufferedTextReader reader = new BufferedTextReader(textReader))
+            using BufferedTextReader reader = new(textReader);
+            string currentLine;
+            while ((currentLine = reader.ReadLine()) != null)
             {
-                string currentLine;
-                while ((currentLine = reader.ReadLine()) != null)
-                {
-                    DummyParser(currentLine);
-                    if (_insideString) { continue; }
+                DummyParser(currentLine);
+                if (_insideString) { continue; }
 
-                    string fullLine = reader.GetBuffer();
-                    reader.CleanBuffer();
-                    List<long> fieldIndexes = ParseLineIndex(fullLine, _index[idxRow]);
-                    _fieldIndex.Add(fieldIndexes);
+                string fullLine = reader.GetBuffer();
+                reader.CleanBuffer();
+                List<long> fieldIndexes = ParseLineIndex(fullLine, _index[idxRow]);
+                _fieldIndex.Add(fieldIndexes);
 
-                    _index.Add(reader.Position);
+                _index.Add(reader.Position);
 
-                    idxRow++;
-                }
+                idxRow++;
             }
         }
 
         private void Index_SaveFile(string indexFile)
         {
+            if (indexFile == null) { return; }
             if (File.Exists(indexFile))
             {
                 File.Delete(indexFile);
             }
             Stream streamOut = File.Open(indexFile, FileMode.Create);
-            using (BinaryWriter binWriter = new BinaryWriter(streamOut))
+            using (BinaryWriter binWriter = new(streamOut))
             {
                 binWriter.Write(_index.Count);
                 for (int i = 0; i < _index.Count; i++)
                 {
                     binWriter.Write(_index[i]);
                 }
+                binWriter.Write("test");
             }
             streamOut.Close();
         }
 
-        private static List<long> Index_LoadFile(string indexFile)
+        private void Index_LoadFile(string indexFile)
         {
-            List<long> tempIndex = new List<long>();
-
+            if (File.Exists(indexFile) == false)
+            {
+                return;
+            }
+            List<long> tempIndex = new();
             Stream streamIn = File.Open(indexFile, FileMode.Open);
-            using (BinaryReader binReader = new BinaryReader(streamIn))
+            using (BinaryReader binReader = new(streamIn))
             {
                 int numRegs = binReader.ReadInt32();
                 for (int i = 0; i < numRegs; i++)
@@ -186,7 +187,7 @@ namespace CsvLib
                 }
             }
             streamIn.Close();
-            return tempIndex;
+            _index = tempIndex;
         }
 
         public void LoadIndexOfFile(string file)
@@ -195,7 +196,7 @@ namespace CsvLib
             string indexFile = $"{file}.idx2";
             if (File.Exists(indexFile) && File.GetCreationTime(indexFile) > dtFile)
             {
-                _index = Index_LoadFile(indexFile);
+                Index_LoadFile(indexFile);
             }
             else
             {
