@@ -179,7 +179,7 @@ namespace CsvLib
                     binWriter.Write(currentFieldIndex.Count);
                     for (int i = 0; i < currentFieldIndex.Count; i++)
                     {
-                        binWriter.Write(_index[i]);
+                        binWriter.Write(currentFieldIndex[i]);
                     }
                 }
             }
