@@ -74,7 +74,7 @@ public partial class MainWindow : Window
         _loadedFile = fileName;
         TxtFileName.Text = fileName;
 
-        CsvIndexer csvIndexer = new();
+        CsvFieldIndexer csvIndexer = new();
         csvIndexer.LoadIndexOfFile(_loadedFile);
         _index = csvIndexer.Index;
         _totalRegs = _index.Count - 1;
