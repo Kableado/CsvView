@@ -10,7 +10,7 @@ namespace CsvLib
         private bool _insideString;
 
         private Encoding _currentEncoding = Encoding.Default;
-        
+
         private readonly char _separator;
         private readonly char _quoteChar;
         private readonly char _escapeChar;
@@ -97,7 +97,7 @@ namespace CsvLib
                     {
                         unicodeDelta += _currentEncoding.GetByteCount(c.ToString()) - 1;
                     }
-                    
+
                     long absolutePosition = lineOffset + i + unicodeDelta;
                     fieldStartPosition ??= absolutePosition;
                     fieldEndPosition = absolutePosition;
@@ -114,7 +114,7 @@ namespace CsvLib
             return fieldPositions;
         }
 
-        public void GenerateIndex(string file)
+        private void GenerateIndex(string file)
         {
             using FileStream stream = new(file, FileMode.Open);
             using StreamReader streamReader = new(stream, Encoding.Default, true, 4096);
@@ -149,7 +149,9 @@ namespace CsvLib
             }
         }
 
-        private void Index_SaveFile(string indexFile)
+        private const byte FileFormatVersion = 1;
+
+        private void SaveFile(string indexFile)
         {
             if (indexFile == null) { return; }
             if (File.Exists(indexFile))
@@ -159,57 +161,106 @@ namespace CsvLib
             Stream streamOut = File.Open(indexFile, FileMode.Create);
             using (BinaryWriter binWriter = new(streamOut))
             {
+                binWriter.Write((byte)'C');
+                binWriter.Write((byte)'S');
+                binWriter.Write((byte)'V');
+
+                binWriter.Write(FileFormatVersion);
+
                 binWriter.Write(_index.Count);
-                for (int i = 0; i < _index.Count; i++)
+                foreach (long currentIndex in _index)
                 {
-                    binWriter.Write(_index[i]);
+                    binWriter.Write(currentIndex);
                 }
-                binWriter.Write("test");
+                
+                binWriter.Write(_fieldIndex.Count);
+                foreach (List<long> currentFieldIndex in _fieldIndex)
+                {
+                    binWriter.Write(currentFieldIndex.Count);
+                    for (int i = 0; i < currentFieldIndex.Count; i++)
+                    {
+                        binWriter.Write(_index[i]);
+                    }
+                }
             }
             streamOut.Close();
         }
 
-        private void Index_LoadFile(string indexFile)
+        private bool LoadFile(string indexFile)
         {
             if (File.Exists(indexFile) == false)
             {
-                return;
+                return false;
             }
-            List<long> tempIndex = new();
+            List<long> tempIndex;
+            List<List<long>> tempFieldIndex;
             Stream streamIn = File.Open(indexFile, FileMode.Open);
-            using (BinaryReader binReader = new(streamIn))
+            try
             {
-                int numRegs = binReader.ReadInt32();
-                for (int i = 0; i < numRegs; i++)
+                using BinaryReader binReader = new(streamIn);
+                
+                byte magik0 = binReader.ReadByte();
+                byte magik1 = binReader.ReadByte();
+                byte magik2 = binReader.ReadByte();
+                if (magik0 != (byte)'C' || magik1 != (byte)'S' || magik2 != (byte)'V') { return false; }
+
+                byte fileVersion = binReader.ReadByte();
+                if (fileVersion != FileFormatVersion) { return false; }
+
+                int numIndexes = binReader.ReadInt32();
+                tempIndex = new List<long>(numIndexes);
+                for (int i = 0; i < numIndexes; i++)
                 {
                     long value = binReader.ReadInt64();
                     tempIndex.Add(value);
                 }
+                
+                int numFieldIndexes = binReader.ReadInt32();
+                tempFieldIndex = new List<List<long>>(numFieldIndexes);
+                for (int j = 0; j < numFieldIndexes; j++)
+                {
+                    int numCurrentFieldIndexes = binReader.ReadInt32();
+                    List<long> currentFieldIndex = new(numCurrentFieldIndexes);
+                    for (int i = 0; i < numCurrentFieldIndexes; i++)
+                    {
+                        long value = binReader.ReadInt64();
+                        currentFieldIndex.Add(value);
+                    }
+                    tempFieldIndex.Add(currentFieldIndex);
+                }
             }
-            streamIn.Close();
+            catch (Exception)
+            {
+                // NON NON NOM
+                return false;
+            }
+            finally
+            {
+                streamIn.Close();
+            }
             _index = tempIndex;
+            _fieldIndex = tempFieldIndex;
+            return true;
         }
 
         public void LoadIndexOfFile(string file)
         {
             DateTime dtFile = File.GetCreationTime(file);
-            string indexFile = $"{file}.idx2";
+            string indexFile = $"{file}.idx";
             if (File.Exists(indexFile) && File.GetCreationTime(indexFile) > dtFile)
             {
-                Index_LoadFile(indexFile);
+                if (LoadFile(indexFile)) { return; }
             }
-            else
-            {
-                // Generate index
-                DateTime dtNow = DateTime.UtcNow;
-                GenerateIndex(file);
-                TimeSpan tsGenIndex = DateTime.UtcNow - dtNow;
 
-                // Save Index if expensive generation
-                if (tsGenIndex.TotalSeconds > 2)
-                {
-                    Index_SaveFile(indexFile);
-                }
+            // Generate index
+            DateTime dtNow = DateTime.UtcNow;
+            GenerateIndex(file);
+            TimeSpan tsGenIndex = DateTime.UtcNow - dtNow;
+
+            // Save Index if expensive generation
+            if (tsGenIndex.TotalSeconds > 2)
+            {
+                SaveFile(indexFile);
             }
         }
     }
