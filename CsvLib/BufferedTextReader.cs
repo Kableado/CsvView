@@ -39,11 +39,6 @@ namespace CsvLib
             return read;
         }
 
-        public override int Peek()
-        {
-            return _baseReader.Peek();
-        }
-
         public int Position
         {
             get { return _position; }

@@ -32,8 +32,7 @@ public class ByteArraySearcher
                 }
             }
 
-            if (found)
-                return true;
+            if (found) { return true; }
         }
 
         return false;

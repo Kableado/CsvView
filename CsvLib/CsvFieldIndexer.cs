@@ -119,6 +119,7 @@ namespace CsvLib
             using FileStream stream = new(file, FileMode.Open);
             using StreamReader streamReader = new(stream, Encoding.Default, true, 4096);
             GenerateIndex(streamReader);
+            stream.Close();
         }
 
         public void GenerateIndex(TextReader textReader)
@@ -172,7 +173,7 @@ namespace CsvLib
                 {
                     binWriter.Write(currentIndex);
                 }
-                
+
                 binWriter.Write(_fieldIndex.Count);
                 foreach (List<long> currentFieldIndex in _fieldIndex)
                 {
@@ -198,7 +199,7 @@ namespace CsvLib
             try
             {
                 using BinaryReader binReader = new(streamIn);
-                
+
                 byte magik0 = binReader.ReadByte();
                 byte magik1 = binReader.ReadByte();
                 byte magik2 = binReader.ReadByte();
@@ -214,7 +215,7 @@ namespace CsvLib
                     long value = binReader.ReadInt64();
                     tempIndex.Add(value);
                 }
-                
+
                 int numFieldIndexes = binReader.ReadInt32();
                 tempFieldIndex = new List<List<long>>(numFieldIndexes);
                 for (int j = 0; j < numFieldIndexes; j++)
@@ -262,6 +263,62 @@ namespace CsvLib
             {
                 SaveFile(indexFile);
             }
+        }
+
+        public List<long> Search(string fileName, string textToSearch, Action<float> notifyProgress = null)
+        {
+            List<long> index;
+            using FileStream streamIn = new(fileName, FileMode.Open);
+            try
+            {
+                index = Search(streamIn, textToSearch, notifyProgress);
+            }
+            finally
+            {
+                streamIn.Close();
+            }
+            return index ?? new List<long>();
+        }
+        
+        public List<long> Search(Stream streamIn, string textToSearch, Action<float> notifyProgress = null)
+        {
+            // TODO: Use MemoryMappedFile for better IO performance
+            DateTime datePrevious = DateTime.UtcNow;
+            List<long> newIndexes = new();
+            byte[] bText = Encoding.UTF8.GetBytes(textToSearch);
+            ByteArraySearcher searcher = new(bText);
+            byte[] buffer = new byte[1024];
+            for (int j = 0; j < _fieldIndex.Count; j++)
+            {
+                for (int i = 0; i < _fieldIndex[j].Count; i += 2)
+                {
+                    TimeSpan tsElapsed = DateTime.UtcNow - datePrevious;
+                    if (tsElapsed.TotalMilliseconds > 200)
+                    {
+                        datePrevious = DateTime.UtcNow;
+                        notifyProgress?.Invoke(j/(float)_fieldIndex.Count);
+                    }
+                    
+                    long offset = _fieldIndex[j][i];
+                    int length = (int)(_fieldIndex[j][i + 1] - offset) + 1;
+                    
+                    if (buffer.Length < length)
+                    {
+                        buffer = new byte[length];
+                    }
+                    streamIn.Seek(offset, SeekOrigin.Begin);
+                    int read = streamIn.Read(buffer, 0, length);
+                    if (read != length) { throw new Exception($"Search: Expected {length} bytes, but read {read}"); }
+
+                    bool matches = searcher.Contains(buffer, length);
+                    if (matches == false) { continue; }
+                    
+                    newIndexes.Add(_index[j]);
+                    break;
+                }
+            }
+
+            return newIndexes;
         }
     }
 }

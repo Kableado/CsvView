@@ -1,3 +1,4 @@
+using System.Text;
 using CsvLib;
 
 namespace CvsLib;
@@ -172,4 +173,77 @@ public class CsvFieldIndexerTests
 
     #endregion GenerateIndex
 
+    #region Search
+    
+    [Fact]
+    public void Search__TwoLinesWithTwoQuotedColumns__OneIndexFirstRow()
+    {
+        // --- Arrange
+        string strText = """
+                         "Hello","test"
+                         "Hello","World"
+                         """;
+        StringReader sr = new(strText);
+        CsvFieldIndexer indexer = new();
+        indexer.GenerateIndex(sr);
+
+        // --- Act
+        byte[] bText = Encoding.UTF8.GetBytes(strText);
+        MemoryStream ms = new(bText);
+        List<long> indexes = indexer.Search(ms, "test");
+
+        // --- Assert
+
+        Assert.Single(indexes);
+        Assert.Equal(0, indexes[0]);
+    }
+
+    [Fact]
+    public void Search__TwoLinesWithTwoQuotedColumns__OneIndexSecondRow()
+    {
+        // --- Arrange
+        string strText = """
+                         "Hello","World"
+                         "Hello","test"
+                         """;
+        StringReader sr = new(strText);
+        CsvFieldIndexer indexer = new();
+        indexer.GenerateIndex(sr);
+
+        // --- Act
+        byte[] bText = Encoding.UTF8.GetBytes(strText);
+        MemoryStream ms = new(bText);
+        List<long> indexes = indexer.Search(ms, "test");
+
+        // --- Assert
+
+        Assert.Single(indexes);
+        Assert.Equal(16, indexes[0]);
+    }
+
+    [Fact]
+    public void Search__TwoLinesWithTwoQuotedColumnsTwoMatches__OneIndexSecondRow()
+    {
+        // --- Arrange
+        string strText = """
+                         "Hello","World"
+                         "test","test"
+                         """;
+        StringReader sr = new(strText);
+        CsvFieldIndexer indexer = new();
+        indexer.GenerateIndex(sr);
+
+        // --- Act
+        byte[] bText = Encoding.UTF8.GetBytes(strText);
+        MemoryStream ms = new(bText);
+        List<long> indexes = indexer.Search(ms, "test");
+
+        // --- Assert
+
+        Assert.Single(indexes);
+        Assert.Equal(16, indexes[0]);
+    }
+    
+    #endregion Search
+    
 }
