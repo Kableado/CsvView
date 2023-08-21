@@ -38,6 +38,11 @@ public partial class MainWindow : Window
         LoadFile(files[0].Path.LocalPath);
     }
 
+    private void BtnSearch_OnClick(object? sender, RoutedEventArgs e)
+    {
+        Search(TxtSearch.Text);
+    }
+    
     private void BtnFirst_OnClick(object? sender, RoutedEventArgs e)
     {
         RenderReg(0);
@@ -68,9 +73,9 @@ public partial class MainWindow : Window
     private int _totalRegs;
     private List<long> _index = new();
 
-
     private void LoadFile(string fileName)
     {
+        // TODO: Loading animation
         _loadedFile = fileName;
         TxtFileName.Text = fileName;
 
@@ -82,9 +87,22 @@ public partial class MainWindow : Window
         RenderReg(0);
     }
 
+    private void Search(string? textToSearch)
+    {
+        // TODO: Loading animation
+        CsvFieldIndexer csvIndexer = new();
+        csvIndexer.LoadIndexOfFile(_loadedFile);
+
+        List<long> newIndexes = csvIndexer.Search(_loadedFile, textToSearch);
+        _index = newIndexes;
+        _totalRegs = _index.Count - 1;
+
+        RenderReg(0, forceLoad: true);
+    }
+
     private bool _rendering;
 
-    private void RenderReg(long currentReg)
+    private void RenderReg(long currentReg, bool forceLoad = false)
     {
         if (_rendering) { return; }
         _rendering = true;
@@ -122,7 +140,7 @@ public partial class MainWindow : Window
         BtnNext.IsEnabled = (last == false);
         BtnLast.IsEnabled = (last == false);
 
-        if (_currentReg == currentReg)
+        if (_currentReg == currentReg && forceLoad == false)
         {
             _rendering = false;
             return;
@@ -143,7 +161,6 @@ public partial class MainWindow : Window
 
         _rendering = false;
     }
-
 }
 
 public class FieldViewModel

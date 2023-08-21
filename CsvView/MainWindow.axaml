@@ -9,12 +9,16 @@
         Width="800"
         Height="600"
         Title="CsvView">
-    <Grid RowDefinitions="Auto,Auto,*">
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button Name="BtnLoad" Click="BtnLoad_OnClick">...</Button>
-            <TextBox Name="TxtFileName" IsReadOnly="true" />
-        </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="1">
+    <Grid RowDefinitions="Auto,Auto,Auto,*">
+        <Grid ColumnDefinitions="Auto,*" Grid.Row="0">
+            <Button Grid.Column="0" Name="BtnLoad" Click="BtnLoad_OnClick">...</Button>
+            <TextBox Grid.Column="1" Name="TxtFileName" IsReadOnly="true" />
+        </Grid>
+        <Grid ColumnDefinitions="*,Auto" Grid.Row="1">
+            <TextBox Grid.Column="0" Name="TxtSearch" />
+            <Button Grid.Column="1" Name="BtnSearch" Click="BtnSearch_OnClick">🔍</Button>
+        </Grid>
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
             <Button Name="BtnFirst" Click="BtnFirst_OnClick">|◁</Button>
             <Button Name="BtnPrevious" Click="BtnPrevious_OnClick">◁</Button>
             <TextBox Name="TxtIndex" Text="{Binding Index}" TextChanged="TxtIndex_OnTextChanged"></TextBox>
@@ -23,7 +27,7 @@
             <Button Name="BtnNext" Click="BtnNext_OnClick">▷</Button>
             <Button Name="BtnLast" Click="BtnLast_OnClick">▷|</Button>
         </StackPanel>
-        <ScrollViewer Grid.Row="2">
+        <ScrollViewer Grid.Row="3">
             <StackPanel Orientation="Vertical">
                 <ItemsControl ItemsSource="{Binding Fields}">
                     <ItemsControl.DataTemplates>
