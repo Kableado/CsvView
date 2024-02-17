@@ -5,7 +5,6 @@ namespace CvsLib;
 
 public class CsvFieldIndexerTests
 {
-
     #region GenerateIndex
 
     [Fact]
@@ -51,10 +50,11 @@ public class CsvFieldIndexerTests
     public void GenerateIndex__TwoLinesOfPainText__TwoRows()
     {
         // --- Arrange
-        StringReader sr = new("""
-                              Hello World
-                              Hello World
-                              """);
+        StringReader sr = new(
+            """
+              Hello World
+              Hello World
+              """);
 
         // --- Act
         CsvFieldIndexer indexer = new();
@@ -80,10 +80,11 @@ public class CsvFieldIndexerTests
     public void GenerateIndex__TwoLinesOfQuotedText__TwoRows()
     {
         // --- Arrange
-        StringReader sr = new("""
-                              "Hello World"
-                              "Hello World"
-                              """);
+        StringReader sr = new(
+            """
+              "Hello World"
+              "Hello World"
+              """);
 
         // --- Act
         CsvFieldIndexer indexer = new();
@@ -109,10 +110,11 @@ public class CsvFieldIndexerTests
     public void GenerateIndex__TwoLinesWithTwoQuotedColumns__TwoRowsTwoFields()
     {
         // --- Arrange
-        StringReader sr = new("""
-                              "Hello","World"
-                              "Hello","World"
-                              """);
+        StringReader sr = new(
+            """
+              "Hello","World"
+              "Hello","World"
+              """);
 
         // --- Act
         CsvFieldIndexer indexer = new();
@@ -142,10 +144,11 @@ public class CsvFieldIndexerTests
     public void GenerateIndex__TwoLinesWithTwoQuotedColumnsWithUnicode__TwoRowsTwoFields()
     {
         // --- Arrange
-        StringReader sr = new("""
-                              "Hélló","Wórld"
-                              "Hélló","Wórld"
-                              """);
+        StringReader sr = new(
+            """
+              "Hélló","Wórld"
+              "Hélló","Wórld"
+              """);
 
         // --- Act
         CsvFieldIndexer indexer = new();
@@ -174,15 +177,16 @@ public class CsvFieldIndexerTests
     #endregion GenerateIndex
 
     #region Search
-    
+
     [Fact]
     public void Search__TwoLinesWithTwoQuotedColumns__OneIndexFirstRow()
     {
         // --- Arrange
-        string strText = """
-                         "Hello","test"
-                         "Hello","World"
-                         """;
+        const string strText = 
+            """
+            "Hello","test"
+            "Hello","World"
+            """;
         StringReader sr = new(strText);
         CsvFieldIndexer indexer = new();
         indexer.GenerateIndex(sr);
@@ -202,10 +206,11 @@ public class CsvFieldIndexerTests
     public void Search__TwoLinesWithTwoQuotedColumns__OneIndexSecondRow()
     {
         // --- Arrange
-        string strText = """
-                         "Hello","World"
-                         "Hello","test"
-                         """;
+        const string strText =
+            """
+            "Hello","World"
+            "Hello","test"
+            """;
         StringReader sr = new(strText);
         CsvFieldIndexer indexer = new();
         indexer.GenerateIndex(sr);
@@ -225,10 +230,11 @@ public class CsvFieldIndexerTests
     public void Search__TwoLinesWithTwoQuotedColumnsTwoMatches__OneIndexSecondRow()
     {
         // --- Arrange
-        string strText = """
-                         "Hello","World"
-                         "test","test"
-                         """;
+        const string strText =
+            """
+            "Hello","World"
+            "test","test"
+            """;
         StringReader sr = new(strText);
         CsvFieldIndexer indexer = new();
         indexer.GenerateIndex(sr);
@@ -243,7 +249,7 @@ public class CsvFieldIndexerTests
         Assert.Single(indexes);
         Assert.Equal(16, indexes[0]);
     }
-    
+
     #endregion Search
-    
+
 }

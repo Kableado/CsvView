@@ -28,8 +28,8 @@ public partial class MainWindow : Window
             AllowMultiple = false,
             FileTypeFilter = new List<FilePickerFileType>
             {
-                new("CSV Files") { Patterns = new[] { "*.csv" } },
-                new("Any File") { Patterns = new[] { "*" } },
+                new("CSV Files") { Patterns = new[] { "*.csv", }, },
+                new("Any File") { Patterns = new[] { "*", }, },
             },
         });
 
@@ -89,6 +89,8 @@ public partial class MainWindow : Window
 
     private void Search(string? textToSearch)
     {
+        if (textToSearch == null) { return; }
+        
         // TODO: Loading animation
         CsvFieldIndexer csvIndexer = new();
         csvIndexer.LoadIndexOfFile(_loadedFile);

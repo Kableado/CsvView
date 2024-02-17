@@ -1,5 +1,3 @@
-#nullable enable
-
 namespace CsvLib;
 
 public class ByteArraySearcher
