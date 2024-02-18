@@ -252,4 +252,34 @@ public class CsvFieldIndexerTests
 
     #endregion Search
 
+    #region Save & Load
+    
+    [Fact]
+    public void Save__TwoLinesWithTwoQuotedColumnsTwoMatchesSave__LoadsCorrectly()
+    {
+        // --- Arrange
+        StringReader sr = new(
+            """
+            "Hélló","Wórld"
+            "Hélló","Wórld"
+            """);
+
+        // --- Act
+        CsvFieldIndexer indexer = new();
+        indexer.GenerateIndex(sr);
+        MemoryStream stream = new();
+        indexer.Save(stream);
+        byte[] savedData = stream.ToArray();
+        CsvFieldIndexer indexer2 = new();
+        MemoryStream stream2 = new(savedData);
+        bool loadResult = indexer2.Load(stream2);
+        
+        // --- Assert
+        Assert.True(loadResult);
+        Assert.Equal(indexer.Index, indexer2.Index);
+        Assert.Equal(indexer.FieldIndex, indexer2.FieldIndex);
+    }
+
+    #endregion Save & Load 
+    
 }

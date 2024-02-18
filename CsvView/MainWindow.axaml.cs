@@ -95,7 +95,7 @@ public partial class MainWindow : Window
         CsvFieldIndexer csvIndexer = new();
         csvIndexer.LoadIndexOfFile(_loadedFile);
 
-        List<long> newIndexes = csvIndexer.Search(_loadedFile, textToSearch);
+        List<long> newIndexes = csvIndexer.SearchFile(_loadedFile, textToSearch);
         _index = newIndexes;
         _totalRegs = _index.Count - 1;
 

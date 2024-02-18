@@ -7,6 +7,10 @@ namespace CsvLib;
 
 public class CsvFieldIndexer
 {
+    #region Declarations
+    
+    private const byte FileFormatVersion = 1;
+
     private bool _insideString;
 
     private Encoding _currentEncoding = Encoding.Default;
@@ -15,13 +19,21 @@ public class CsvFieldIndexer
     private readonly char _quoteChar;
     private readonly char _escapeChar;
 
+    #endregion Declarations
+    
+    #region Life cycle
+    
     public CsvFieldIndexer(char separator = ',', char quoteChar = '"', char escapeChar = '\\')
     {
         _separator = separator;
         _quoteChar = quoteChar;
         _escapeChar = escapeChar;
     }
+    
+    #endregion Life cycle
 
+    #region Properties
+    
     private List<long> _index = new();
 
     public List<long> Index { get { return _index; } }
@@ -30,6 +42,10 @@ public class CsvFieldIndexer
 
     public List<List<long>> FieldIndex { get { return _fieldIndex; } }
 
+    #endregion Properties
+
+    #region Parsing
+    
     private void DummyParser(string line)
     {
         for (int i = 0; i < line.Length; i++)
@@ -114,6 +130,10 @@ public class CsvFieldIndexer
         return fieldPositions;
     }
 
+    #endregion Parsing
+
+    #region GenerateIndex
+    
     private void GenerateIndex(string file)
     {
         using FileStream stream = new(file, FileMode.Open);
@@ -149,7 +169,36 @@ public class CsvFieldIndexer
         }
     }
 
-    private const byte FileFormatVersion = 1;
+    #endregion GenerateIndex
+
+    #region Save
+    
+    public void Save(Stream streamOut)
+    {
+        using BinaryWriter binWriter = new(streamOut);
+
+        binWriter.Write((byte)'C');
+        binWriter.Write((byte)'S');
+        binWriter.Write((byte)'V');
+
+        binWriter.Write(FileFormatVersion);
+
+        binWriter.Write(_index.Count);
+        foreach (long currentIndex in _index)
+        {
+            binWriter.Write(currentIndex);
+        }
+
+        binWriter.Write(_fieldIndex.Count);
+        foreach (List<long> currentFieldIndex in _fieldIndex)
+        {
+            binWriter.Write(currentFieldIndex.Count);
+            foreach (long fieldIndex in currentFieldIndex)
+            {
+                binWriter.Write(fieldIndex);
+            }
+        }
+    }
 
     private void SaveFile(string indexFile)
     {
@@ -158,31 +207,51 @@ public class CsvFieldIndexer
             File.Delete(indexFile);
         }
         Stream streamOut = File.Open(indexFile, FileMode.Create);
-        using (BinaryWriter binWriter = new(streamOut))
-        {
-            binWriter.Write((byte)'C');
-            binWriter.Write((byte)'S');
-            binWriter.Write((byte)'V');
-
-            binWriter.Write(FileFormatVersion);
-
-            binWriter.Write(_index.Count);
-            foreach (long currentIndex in _index)
-            {
-                binWriter.Write(currentIndex);
-            }
-
-            binWriter.Write(_fieldIndex.Count);
-            foreach (List<long> currentFieldIndex in _fieldIndex)
-            {
-                binWriter.Write(currentFieldIndex.Count);
-                foreach (long fieldIndex in currentFieldIndex)
-                {
-                    binWriter.Write(fieldIndex);
-                }
-            }
-        }
+        Save(streamOut);
         streamOut.Close();
+    }
+
+    #endregion Save
+    
+    #region Load
+    
+    public bool Load(Stream streamIn)
+    {
+        using BinaryReader binReader = new(streamIn);
+
+        byte magik0 = binReader.ReadByte();
+        byte magik1 = binReader.ReadByte();
+        byte magik2 = binReader.ReadByte();
+        if (magik0 != (byte)'C' || magik1 != (byte)'S' || magik2 != (byte)'V') { return false; }
+
+        byte fileVersion = binReader.ReadByte();
+        if (fileVersion != FileFormatVersion) { return false; }
+
+        int numIndexes = binReader.ReadInt32();
+        List<long> tempIndex = new(numIndexes);
+        for (int i = 0; i < numIndexes; i++)
+        {
+            long value = binReader.ReadInt64();
+            tempIndex.Add(value);
+        }
+
+        int numFieldIndexes = binReader.ReadInt32();
+        List<List<long>> tempFieldIndex = new(numFieldIndexes);
+        for (int j = 0; j < numFieldIndexes; j++)
+        {
+            int numCurrentFieldIndexes = binReader.ReadInt32();
+            List<long> currentFieldIndex = new(numCurrentFieldIndexes);
+            for (int i = 0; i < numCurrentFieldIndexes; i++)
+            {
+                long value = binReader.ReadInt64();
+                currentFieldIndex.Add(value);
+            }
+            tempFieldIndex.Add(currentFieldIndex);
+        }
+        
+        _index = tempIndex;
+        _fieldIndex = tempFieldIndex;
+        return true;
     }
 
     private bool LoadFile(string indexFile)
@@ -191,42 +260,10 @@ public class CsvFieldIndexer
         {
             return false;
         }
-        List<long> tempIndex;
-        List<List<long>> tempFieldIndex;
         Stream streamIn = File.Open(indexFile, FileMode.Open);
         try
         {
-            using BinaryReader binReader = new(streamIn);
-
-            byte magik0 = binReader.ReadByte();
-            byte magik1 = binReader.ReadByte();
-            byte magik2 = binReader.ReadByte();
-            if (magik0 != (byte)'C' || magik1 != (byte)'S' || magik2 != (byte)'V') { return false; }
-
-            byte fileVersion = binReader.ReadByte();
-            if (fileVersion != FileFormatVersion) { return false; }
-
-            int numIndexes = binReader.ReadInt32();
-            tempIndex = new List<long>(numIndexes);
-            for (int i = 0; i < numIndexes; i++)
-            {
-                long value = binReader.ReadInt64();
-                tempIndex.Add(value);
-            }
-
-            int numFieldIndexes = binReader.ReadInt32();
-            tempFieldIndex = new List<List<long>>(numFieldIndexes);
-            for (int j = 0; j < numFieldIndexes; j++)
-            {
-                int numCurrentFieldIndexes = binReader.ReadInt32();
-                List<long> currentFieldIndex = new(numCurrentFieldIndexes);
-                for (int i = 0; i < numCurrentFieldIndexes; i++)
-                {
-                    long value = binReader.ReadInt64();
-                    currentFieldIndex.Add(value);
-                }
-                tempFieldIndex.Add(currentFieldIndex);
-            }
+            if (Load(streamIn) == false) return false;
         }
         catch (Exception)
         {
@@ -237,8 +274,6 @@ public class CsvFieldIndexer
         {
             streamIn.Close();
         }
-        _index = tempIndex;
-        _fieldIndex = tempFieldIndex;
         return true;
     }
 
@@ -263,21 +298,10 @@ public class CsvFieldIndexer
         }
     }
 
-    public List<long> Search(string fileName, string textToSearch, Action<float>? notifyProgress = null)
-    {
-        List<long> index;
-        using FileStream streamIn = new(fileName, FileMode.Open);
-        try
-        {
-            index = Search(streamIn, textToSearch, notifyProgress);
-        }
-        finally
-        {
-            streamIn.Close();
-        }
-        return index;
-    }
-        
+    #endregion Load
+
+    #region Search
+    
     public List<long> Search(Stream streamIn, string textToSearch, Action<float>? notifyProgress = null)
     {
         // TODO: Use MemoryMappedFile for better IO performance
@@ -294,12 +318,12 @@ public class CsvFieldIndexer
                 if (tsElapsed.TotalMilliseconds > 200)
                 {
                     datePrevious = DateTime.UtcNow;
-                    notifyProgress?.Invoke(j/(float)_fieldIndex.Count);
+                    notifyProgress?.Invoke(j / (float)_fieldIndex.Count);
                 }
-                    
+
                 long offset = _fieldIndex[j][i];
                 int length = (int)(_fieldIndex[j][i + 1] - offset) + 1;
-                    
+
                 if (buffer.Length < length)
                 {
                     buffer = new byte[length];
@@ -310,7 +334,7 @@ public class CsvFieldIndexer
 
                 bool matches = searcher.Contains(buffer, length);
                 if (matches == false) { continue; }
-                    
+
                 newIndexes.Add(_index[j]);
                 break;
             }
@@ -318,4 +342,21 @@ public class CsvFieldIndexer
 
         return newIndexes;
     }
+    
+    public List<long> SearchFile(string fileName, string textToSearch, Action<float>? notifyProgress = null)
+    {
+        List<long> index;
+        using FileStream streamIn = new(fileName, FileMode.Open);
+        try
+        {
+            index = Search(streamIn, textToSearch, notifyProgress);
+        }
+        finally
+        {
+            streamIn.Close();
+        }
+        return index;
+    }
+
+    #endregion Search
 }
