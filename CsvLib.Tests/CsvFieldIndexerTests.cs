@@ -3,6 +3,7 @@ using CsvLib;
 
 namespace CvsLib;
 
+[TestSubject(typeof(CsvFieldIndexer))]
 public class CsvFieldIndexerTests
 {
     #region GenerateIndex

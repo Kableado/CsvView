@@ -2,6 +2,7 @@ using CsvLib;
 
 namespace CvsLib;
 
+[TestSubject(typeof(ByteArraySearcher))]
 public class ByteArraySearcherTests
 {
     [Fact]

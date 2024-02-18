@@ -76,25 +76,28 @@ public class CsvParser
             _currentReg = null;
         }
     }
-
-    public void ParseFile(string file, long offset = 0, int count = 0)
+    
+    public void Parse(TextReader reader, int count = 0)
     {
         _insideString = false;
         _data = new List<List<string>>();
         _currentReg = null;
-        FileStream stream = new(file, FileMode.Open);
-        stream.Seek(offset, SeekOrigin.Begin);
-        using (StreamReader reader = new(stream, Encoding.Default, true, 4096))
+        while (reader.ReadLine() is { } currentLine)
         {
-            while (reader.ReadLine() is { } currentLine)
+            ParseLine(currentLine);
+            if (count > 0 && _data.Count == count)
             {
-                ParseLine(currentLine);
-                if (count > 0 && Data.Count == count)
-                {
-                    break;
-                }
+                break;
             }
         }
+    }
+
+    public void ParseFile(string file, long offset = 0, int count = 0)
+    {
+        FileStream stream = new(file, FileMode.Open);
+        stream.Seek(offset, SeekOrigin.Begin);
+        using StreamReader reader = new(stream, Encoding.Default, true, 4096);
+        Parse(reader, count);
         stream.Close();
     }
 
