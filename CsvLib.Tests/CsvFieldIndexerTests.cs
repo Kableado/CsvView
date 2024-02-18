@@ -1,7 +1,6 @@
 using System.Text;
-using CsvLib;
 
-namespace CvsLib;
+namespace CvsLib.Tests;
 
 [TestSubject(typeof(CsvFieldIndexer))]
 public class CsvFieldIndexerTests

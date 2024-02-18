@@ -1,6 +1,5 @@
-using CsvLib;
 
-namespace CvsLib;
+namespace CvsLib.Tests;
 
 [TestSubject(typeof(CsvParser))]
 public class CsvParserTest
