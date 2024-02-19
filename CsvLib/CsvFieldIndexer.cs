@@ -102,6 +102,9 @@ public class CsvFieldIndexer
             else if (c == _escapeChar && _insideString)
             {
                 i++;
+                long absolutePosition = lineOffset + i + unicodeDelta;
+                fieldStartPosition ??= absolutePosition;
+                fieldEndPosition = absolutePosition;
             }
             else if ((c == '\n' || c == '\r') && _insideString == false)
             {

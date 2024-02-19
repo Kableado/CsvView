@@ -36,7 +36,6 @@ public class CsvParserTest
         Assert.Equal("Hello World", parser.Data[0][0]);
     }
 
-
     [Fact]
     public void Parse__TwoLinesOfPainText__TwoRows()
     {
@@ -103,6 +102,50 @@ public class CsvParserTest
         Assert.Equal(2, parser.Data[1].Count);
         Assert.Equal("Hello", parser.Data[1][0]);
         Assert.Equal("World", parser.Data[1][1]);
+    }
+
+    [Fact]
+    public void Parse__TwoLinesWithOneQuotedColumnsWithEscapedQuotes__TwoRows()
+    {
+        // --- Arrange
+        StringReader sr = new(
+            """
+            "Hello \"World\""
+            "Hello \"World\""
+            """);
+
+        // --- Act
+        CsvParser parser = new();
+        parser.Parse(sr);
+
+        // --- Assert
+        Assert.Equal(2, parser.Data.Count);
+        Assert.Single(parser.Data[0]);
+        Assert.Equal("Hello \"World\"", parser.Data[0][0]);
+        Assert.Single(parser.Data[1]);
+        Assert.Equal("Hello \"World\"", parser.Data[1][0]);
+    }
+
+    [Fact]
+    public void Parse__TwoLinesWithOneQuotedColumnsWithManyEscapedQuotes__TwoRows()
+    {
+        // --- Arrange
+        StringReader sr = new(
+            """
+            "Hello \"World\""
+            "Hello \"World\"\"\""
+            """);
+
+        // --- Act
+        CsvParser parser = new();
+        parser.Parse(sr);
+
+        // --- Assert
+        Assert.Equal(2, parser.Data.Count);
+        Assert.Single(parser.Data[0]);
+        Assert.Equal("Hello \"World\"", parser.Data[0][0]);
+        Assert.Single(parser.Data[1]);
+        Assert.Equal("Hello \"World\"\"\"", parser.Data[1][0]);
     }
 
     [Fact]

@@ -141,6 +141,66 @@ public class CsvFieldIndexerTests
     }
 
     [Fact]
+    public void GenerateIndex__TwoLinesWithOneQuotedColumnsWithEscapedQuotes__TwoRows()
+    {
+        // --- Arrange
+        StringReader sr = new(
+            """
+            "Hello \"World\""
+            "Hello \"World\""
+            """);
+
+        // --- Act
+        CsvFieldIndexer indexer = new();
+        indexer.GenerateIndex(sr);
+
+        // --- Assert
+
+        Assert.Equal(3, indexer.Index.Count);
+        Assert.Equal(0, indexer.Index[0]);
+        Assert.Equal(18, indexer.Index[1]);
+        Assert.Equal(36, indexer.Index[2]);
+
+        Assert.Equal(2, indexer.FieldIndex.Count);
+        Assert.Equal(2, indexer.FieldIndex[0].Count);
+        Assert.Equal(1, indexer.FieldIndex[0][0]);
+        Assert.Equal(15, indexer.FieldIndex[0][1]);
+        Assert.Equal(2, indexer.FieldIndex[1].Count);
+        Assert.Equal(19, indexer.FieldIndex[1][0]);
+        Assert.Equal(33, indexer.FieldIndex[1][1]);
+    }
+
+    [Fact]
+    public void GenerateIndex__TwoLinesWithOneQuotedColumnsWithManyEscapedQuotes__TwoRows()
+    {
+        // --- Arrange
+        StringReader sr = new(
+            """
+            "Hello \"World\""
+            "Hello \"World\"\"\""
+            """);
+
+        // --- Act
+        CsvFieldIndexer indexer = new();
+        indexer.GenerateIndex(sr);
+
+        // --- Assert
+
+        Assert.Equal(3, indexer.Index.Count);
+        Assert.Equal(0, indexer.Index[0]);
+        Assert.Equal(18, indexer.Index[1]);
+        Assert.Equal(40, indexer.Index[2]);
+
+        Assert.Equal(2, indexer.FieldIndex.Count);
+        Assert.Equal(2, indexer.FieldIndex[0].Count);
+        Assert.Equal(1, indexer.FieldIndex[0][0]);
+        Assert.Equal(15, indexer.FieldIndex[0][1]);
+        Assert.Equal(2, indexer.FieldIndex[1].Count);
+        Assert.Equal(19, indexer.FieldIndex[1][0]);
+        Assert.Equal(37, indexer.FieldIndex[1][1]);
+    }
+
+    [Fact]
     public void GenerateIndex__TwoLinesWithTwoQuotedColumnsWithUnicode__TwoRowsTwoFields()
     {
         // --- Arrange
