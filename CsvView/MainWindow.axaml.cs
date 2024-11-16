@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
@@ -19,23 +20,30 @@ public partial class MainWindow : Window
 
     private async void BtnLoad_OnClick(object? sender, RoutedEventArgs e)
     {
-        TopLevel? topLevel = GetTopLevel(this);
-        if (topLevel == null) { return; }
-
-        IReadOnlyList<IStorageFile> files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
+        try
         {
-            Title = "Open CSV File",
-            AllowMultiple = false,
-            FileTypeFilter = new List<FilePickerFileType>
+            TopLevel? topLevel = GetTopLevel(this);
+            if (topLevel == null) { return; }
+
+            IReadOnlyList<IStorageFile> files = await topLevel.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
-                new("CSV Files") { Patterns = new[] { "*.csv", }, },
-                new("Any File") { Patterns = new[] { "*", }, },
-            },
-        });
+                Title = "Open CSV File",
+                AllowMultiple = false,
+                FileTypeFilter = new List<FilePickerFileType>
+                {
+                    new("CSV Files") { Patterns = ["*.csv",], },
+                    new("Any File") { Patterns = ["*",], },
+                },
+            });
 
-        if (files.Count <= 0) { return; }
+            if (files.Count <= 0) { return; }
 
-        LoadFile(files[0].Path.LocalPath);
+            LoadFile(files[0].Path.LocalPath);
+        }
+        catch (Exception)
+        {
+            // ignored
+        }
     }
 
     private void BtnSearch_OnClick(object? sender, RoutedEventArgs e)
@@ -71,7 +79,7 @@ public partial class MainWindow : Window
     private string _loadedFile = string.Empty;
     private long _currentReg;
     private int _totalRegs;
-    private List<long> _index = new();
+    private List<long> _index = [];
 
     private void LoadFile(string fileName)
     {
@@ -118,7 +126,7 @@ public partial class MainWindow : Window
             BtnNext.IsEnabled = false;
             BtnLast.IsEnabled = false;
 
-            DataContext = new MainWindowViewModel { Index = 0, Fields = new(), };
+            DataContext = new MainWindowViewModel { Index = 0, Fields = [], };
             _rendering = false;
             return;
         }
