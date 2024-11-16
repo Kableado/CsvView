@@ -1,7 +1,6 @@
 
 namespace CvsLib.Tests;
 
-[TestSubject(typeof(CsvParser))]
 public class CsvParserTest
 {
     #region Parse

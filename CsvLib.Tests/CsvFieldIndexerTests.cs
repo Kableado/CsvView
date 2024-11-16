@@ -2,7 +2,6 @@ using System.Text;
 
 namespace CvsLib.Tests;
 
-[TestSubject(typeof(CsvFieldIndexer))]
 public class CsvFieldIndexerTests
 {
     #region GenerateIndex

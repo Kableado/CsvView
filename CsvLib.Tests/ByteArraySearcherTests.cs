@@ -1,7 +1,6 @@
 
 namespace CvsLib.Tests;
 
-[TestSubject(typeof(ByteArraySearcher))]
 public class ByteArraySearcherTests
 {
     [Fact]
@@ -9,7 +8,7 @@ public class ByteArraySearcherTests
     {
         // --- Arrange
         byte[] haystack = [1, 2, 3, 4, 5,];
-        byte[] needle = Array.Empty<byte>();
+        byte[] needle = [];
         ByteArraySearcher searcher = new(needle);
 
         // --- Act
