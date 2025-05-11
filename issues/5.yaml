@@ -1,0 +1,8 @@
+id: 5
+title: Escapado de comillas dobles
+state: open
+tags: bug
+
+Escapado de comillas dobles.
+Este se hace duplicando. p.e:
+`001,"Texto ""Texto entrecomillado"""`
