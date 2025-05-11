@@ -1,0 +1,6 @@
+id: 4
+title: Genera indices con offsets incorrectos, cuando hay caracteres unicode
+state: closed
+tags: bug
+
+
