@@ -1,0 +1,6 @@
+id: 2
+title: Implementar indexado de campos
+state: closed
+tags: enhancement
+
+`CvsIndexer` implementa un indexado de registros. Para poder realizar búsquedas de forma eficiente, seria bueno tener también un indexado de campos.
